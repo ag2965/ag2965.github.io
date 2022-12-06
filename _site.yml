@@ -9,7 +9,7 @@ navbar:
       href: overview.html
     - text: "Mapping"
       href: mapping.html 
-    - text: “Time analyses"
+    - text: "Time Analyses"
       href: timeanalyses.html
     - text: "Holidays"
       href: holidays.html 
