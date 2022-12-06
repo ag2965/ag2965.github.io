@@ -4,7 +4,7 @@ output:
   html_document:
     toc: true
     toc_float: true
-    theme: cerulean
+    theme: cosmo
 ---
 
 We were interested to see if shooting incidents occurred more commonly on holidays over other days of the year. 
