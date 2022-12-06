@@ -53,4 +53,4 @@ Below, we have described the variables included in this dataset, and have includ
 
 <b>Longitude:</b> longitude coordinate for Global Coordinate System
 
-<b>Lon_Lat:</b> longitude and latitude coordinates for mapping
+<b>Lon_lat:</b> longitude and latitude coordinates for mapping

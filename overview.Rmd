@@ -52,9 +52,9 @@ nypd_shooting_df =
   select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())
 ```
 
-Here is a summary of the overall demographics of the perpetrators and the victims involved in NYC shootings, including age, sex, and race/ethnicity. There were a total of `r nrow(nypd_shooting_df)` shootings from 2016 to 2021 reported by the NYPD. Overall, we see that <b> the majority of victims and perpetrators were young (aged 18-44 years) involving black male perpetrators and victims. </b> <br>
+Here is a summary of the overall demographics of the perpetrators and victims involved in NYC shootings, including age, sex, and race/ethnicity. There were a total of `r nrow(nypd_shooting_df)` shootings from 2006 to 2021 reported by the NYPD. Overall, we see that <b> the majority of victims and perpetrators were young (aged 18-44 years), black, and males. </b> <br>
 
-<em> *Of note, these data included many NA entries particularly for the perpetrators, so analyses were conducted on available data. For the purposes of simplifying race/ethnicity categorization, we collapsed white Hispanic and black Hispanic individuals into a single category titled “Hispanic”. </em><br><br>
+<em> *Of note, these data included many NA entries particularly for perpetrators, so analyses were conducted on available data. For the purposes of simplifying race/ethnicity categorization, we collapsed white Hispanic and black Hispanic individuals into a single category titled “Hispanic”. </em><br><br>
 
 ### Perpetrator Demographics
 
