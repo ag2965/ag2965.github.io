@@ -25,5 +25,5 @@ navbar:
       href: http://github.com/ag2965/
 output:
   html_document:
-    theme: cerulean
+    theme: cosmo
     

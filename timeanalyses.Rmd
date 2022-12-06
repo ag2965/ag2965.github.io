@@ -53,7 +53,7 @@ nypd_shooting_df =
 ```
 
 ### Shootings Over Time
-We wanted to see the longitudinal changes in shootings by borough. This is represented in the stacked bar graph below. There is a decline in shootings from 2005 to 2019, then a sharp increase from 2020 onwards.
+We wanted to see the longitudinal changes in shootings by borough. This is represented in the stacked bar graph below. There is a decline in shootings from 2006 to 2019, then a sharp increase from 2020 onwards.
 
 ```{r}
 shooting_year = 
@@ -110,7 +110,7 @@ ggplotly(shootings_seasons)
 ```
 
 ### Which season is most deadly?
-Murders followed a similar pattern, but the summer of 2020 (and apparently 2010) also had a relatively high rate of murders.
+Murders followed a similar pattern, but the summer of 2020 (and apparently 2010) also had a relatively high number of murders.
 
 ```{r}
 murders_df = nypd_shooting_df %>%

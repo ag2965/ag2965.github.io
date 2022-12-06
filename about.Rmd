@@ -14,7 +14,7 @@ Each record describes a shooting incident in one of the five NYC boroughs and of
 
 <br>
 
-#### Codebook 
+### Codebook 
 Below, we have described the variables included in this dataset, and have included comments about each:
 
 <b>Incident_key:</b> randomly generated persistent ID for each arrest
