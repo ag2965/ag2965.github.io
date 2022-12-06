@@ -100,8 +100,11 @@ ggplot(aes(y = count, x = month, color = year)) +
   facet_grid(cols = vars(month)) + 
   labs(title = "# of shootings by month (2006-2021)") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
- 
+```
+
+
 Murders followed a similar pattern, but the summer of 2010 also had a relatively high rate of murders.
+```{r}
 murders_df = nypd_shooting_df %>%
   filter(statistical_murder_flag == TRUE) %>%
   janitor::clean_names()
