@@ -11,3 +11,8 @@ We were interested to see if shooting incidents occurred more commonly on holida
 We included the XX major national holidays: [need to fill in]
 Since the date of each holiday differed each year, we created a code to [describe Aaron’s code]
  
+[add Aaron’s code]
+ 
+Our findings demonstrated that the number of shootings on holidays was lower than other days. This is expected as the holidays represent only XX days, or XX% of the total days in a year. 
+ 
+We also compared the victims’ and perpetrators' ages on shootings that occurred on holidays vs. other days of the year. These were not significantly different by a proportion test.
