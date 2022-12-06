@@ -31,7 +31,7 @@ Below, we have described the variables included in this dataset, and have includ
 
 <b>Location_desc:</b>  location of the shooting incident
 
-<b>Statistical_murder_flat:</b> shooting results in the victim’s death, would be counted as a murder
+<b>Statistical_murder_flag:</b> shooting results in the victim’s death, would be counted as a murder
 
 <b>Perp_age_group:</b> perpetrator's age within a category
 
