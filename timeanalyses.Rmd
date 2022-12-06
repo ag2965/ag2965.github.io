@@ -138,7 +138,7 @@ ggplot(aes(y = count, x = year, color = season)) +
 ggplotly(murders_seasons)
 ```
  
-We've unfortunately all seen the [headlines](https://www.nytimes.com/2020/09/02/nyregion/nyc-shootings-murders.html) (and the numbers here back it up). We quote here an excerpt from a NYT article published in September 2020:
+We've unfortunately all seen the headlines, and the numbers here back it up. We quote here an excerpt from a [NYT article](https://www.nytimes.com/2020/09/02/nyregion/nyc-shootings-murders.html) published in September 2020:
 
 <br> <center>
 <em>“Violent crime always rises in the summer, but this year has been extreme in New York. Since May, the city has recorded 791 shootings, a more than 140 percent increase over the same period in 2019. The 180 murders seen between May and August is a more than 51 percent increase compared to 2019.
