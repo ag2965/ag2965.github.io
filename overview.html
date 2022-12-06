@@ -13,7 +13,7 @@
 
 <title>Overview</title>
 
-<script src="site_libs/header-attrs-2.18/header-attrs.js"></script>
+<script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
@@ -183,8 +183,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "\e259";
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -192,9 +192,16 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "\e258";
-  font-family: 'Glyphicons Halflings';
+  content: "&#xe258;";
   border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -333,10 +340,13 @@ div.tocify {
   <a href="mapping.html">Mapping</a>
 </li>
 <li>
-  <a href="timeanalyses.html">“Time analyses"</a>
+  <a href="timeanalyses.html">Time Analyses</a>
 </li>
 <li>
   <a href="holidays.html">Holidays</a>
+</li>
+<li>
+  <a href="screencast.html">Animation + Additional Overview</a>
 </li>
 <li>
   <a href="screencast.html">Screencast</a>
@@ -355,7 +365,7 @@ div.tocify {
 </li>
 <li>
   <a href="http://github.com/ag2965/">
-    <span class="fa fa-github fa-lg"></span>
+    <span class="fa fa-github"></span>
      
   </a>
 </li>
@@ -373,6 +383,7 @@ div.tocify {
 </div>
 
 
+<p>#Overview</p>
 <p>Below, we have described the demographics of the perpetrators and the
 victims, including age group and race/ethnicity. Of note, these data
 included many NA entries. We see that most victims and perpetrators were
@@ -381,6 +392,139 @@ with black male perpetrators and victims [need to check with Jen that I
 am interpreting her description correctly]. For the purposes of
 simplifying race/ethnicity categorization, we lumped white Hispanic and
 black Hispanic individuals into a single category titled “Hispanic”.</p>
+<p>[need to create a table]</p>
+<pre class="r"><code>nypd_shooting_df = 
+  read_csv(&quot;data/nypd_shooting_data.csv&quot;) %&gt;%
+  janitor::clean_names() %&gt;%
+  separate(col = occur_date, into = c(&quot;month&quot;, &quot;day&quot;, &quot;year&quot;), sep = &quot;/&quot;) %&gt;% 
+  separate(col = occur_time, into = c(&quot;hour&quot;, &quot;minute&quot;, &quot;second&quot;), sep = &quot;:&quot;) %&gt;%
+  mutate(across(where(is.character), tolower),
+         month = as.numeric(month),
+         month_name = recode(month, &quot;1&quot; = &quot;january&quot;, &quot;2&quot; = &quot;february&quot;, &quot;3&quot; = &quot;march&quot;, &quot;4&quot; = &quot;april&quot;, &quot;5&quot; = &quot;may&quot;, &quot;6&quot; = &quot;june&quot;, &quot;7&quot; = &quot;july&quot;, &quot;8&quot; = &quot;august&quot;, &quot;9&quot; = &quot;september&quot;, &quot;10&quot; = &quot;october&quot;, &quot;11&quot; = &quot;november&quot;, &quot;12&quot; = &quot;december&quot;),
+         day = as.numeric(day),
+         year = as.numeric(year), 
+         hour = as.numeric(hour),
+         minute = as.numeric(minute), 
+         second = as.numeric(second),
+         minute_calc = hour * 60 + minute,
+         boro = as.factor(boro), 
+         boro = fct_relevel(boro, &quot;manhattan&quot;, &quot;brooklyn&quot;, &quot;bronx&quot;, &quot;queens&quot;, &quot;staten island&quot;)) %&gt;%
+  select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())</code></pre>
+<pre><code>## Rows: 25596 Columns: 19
+## ── Column specification ────────────────────────────────────
+## Delimiter: &quot;,&quot;
+## chr  (10): OCCUR_DATE, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_R...
+## dbl   (7): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, X_COORD_CD, Y_COORD_CD...
+## lgl   (1): STATISTICAL_MURDER_FLAG
+## time  (1): OCCUR_TIME
+## 
+## ℹ Use `spec()` to retrieve the full column specification for this data.
+## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+  mutate(
+    perp_age_group = na_if(perp_age_group, 1020),
+    perp_age_group = na_if(perp_age_group, 224),
+    perp_age_group = na_if(perp_age_group, 940),
+    perp_age_group = na_if(perp_age_group, &quot;unknown&quot;),
+  ) %&gt;%
+  group_by(perp_age_group) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   perp_age_group count percentage
+##   &lt;chr&gt;          &lt;int&gt;      &lt;dbl&gt;
+## 1 &lt;18             1463      5.72 
+## 2 18-24           5844     22.8  
+## 3 25-44           5202     20.3  
+## 4 45-64            535      2.09 
+## 5 65+               57      0.223
+## 6 &lt;NA&gt;           12495     48.8</code></pre>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+   mutate(
+    perp_sex = na_if(perp_sex, &quot;u&quot;)) %&gt;%
+  group_by(perp_sex) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100)</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##   perp_sex count percentage
+##   &lt;chr&gt;    &lt;int&gt;      &lt;dbl&gt;
+## 1 f          371       1.45
+## 2 m        14416      56.3 
+## 3 &lt;NA&gt;     10809      42.2</code></pre>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+  mutate(
+    perp_race = recode(perp_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;), 
+    perp_race = na_if(perp_race, &quot;unknown&quot;)
+  ) %&gt;%
+  group_by(perp_race) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   perp_race                      count percentage
+##   &lt;chr&gt;                          &lt;int&gt;      &lt;dbl&gt;
+## 1 american indian/alaskan native     2    0.00781
+## 2 asian / pacific islander         141    0.551  
+## 3 black                          10668   41.7    
+## 4 hispanic                        3367   13.2    
+## 5 white                            272    1.06   
+## 6 &lt;NA&gt;                           11146   43.5</code></pre>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+  group_by(vic_age_group) %&gt;%
+  mutate(
+    vic_age_group = na_if(vic_age_group, &quot;unknown&quot;)
+  ) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   vic_age_group count percentage
+##   &lt;chr&gt;         &lt;int&gt;      &lt;dbl&gt;
+## 1 &lt;18            2681     10.5  
+## 2 18-24          9604     37.5  
+## 3 25-44         11386     44.5  
+## 4 45-64          1698      6.63 
+## 5 65+             167      0.652
+## 6 &lt;NA&gt;             60      0.234</code></pre>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+  group_by(vic_sex) %&gt;%
+  mutate(
+    vic_sex = na_if(vic_sex, &quot;u&quot;)) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100)</code></pre>
+<pre><code>## # A tibble: 3 × 3
+##   vic_sex count percentage
+##   &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;
+## 1 f        2403     9.39  
+## 2 m       23182    90.6   
+## 3 &lt;NA&gt;       11     0.0430</code></pre>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+   mutate(
+    vic_race = recode(vic_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;), 
+    vic_race = na_if(vic_race, &quot;unknown&quot;)
+  ) %&gt;%
+  group_by(vic_race) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100)</code></pre>
+<pre><code>## # A tibble: 6 × 3
+##   vic_race                       count percentage
+##   &lt;chr&gt;                          &lt;int&gt;      &lt;dbl&gt;
+## 1 american indian/alaskan native     9     0.0352
+## 2 asian / pacific islander         354     1.38  
+## 3 black                          18281    71.4   
+## 4 hispanic                        6227    24.3   
+## 5 white                            660     2.58  
+## 6 &lt;NA&gt;                              65     0.254</code></pre>
 
 
 
