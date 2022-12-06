@@ -5,13 +5,8 @@ output:
     toc: true
     toc_float: true
     theme: cerulean
+    code_folding: "hide"
 ---
-#Overview
-
-Below, we have described the demographics of the perpetrators and the victims, including age group and race/ethnicity. Of note, these data included many NA entries. We see that most victims and perpetrators were aged 18-44 years, were of black race, with a high number of incidents with black male perpetrators and victims [need to check with Jen that I am interpreting her description correctly]. For the purposes of simplifying race/ethnicity categorization, we lumped white Hispanic and black Hispanic individuals into a single category titled “Hispanic”.
- 
-[need to create a table]
-
 
 ```{r setup, include = FALSE}
 library(tidyverse)
@@ -22,6 +17,7 @@ library(leaflet)
 knitr::opts_chunk$set(
 echo = TRUE,
 warning = FALSE,
+message = FALSE,
   fig.width = 6,
   fig.asp = .6,
   out.width = "90%")
@@ -40,7 +36,7 @@ scale_fill_discrete = scale_fill_viridis_d
 nypd_shooting_df = 
   read_csv("data/nypd_shooting_data.csv") %>%
   janitor::clean_names() %>%
-  separate(col = occur_date, into = c("month", "day", "year"), sep = "/") %>% 
+  separate(col = occur_date, into = c("month", "day", "year"), sep = "/") %>%
   separate(col = occur_time, into = c("hour", "minute", "second"), sep = ":") %>%
   mutate(across(where(is.character), tolower),
          month = as.numeric(month),
@@ -56,6 +52,14 @@ nypd_shooting_df =
   select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())
 ```
 
+Here is a summary of the overall demographics of the perpetrators and the victims involved in NYC shootings, including age, sex, and race/ethnicity. There were a total of `r nrow(nypd_shooting_df)` shootings from 2016 to 2021 reported by the NYPD. Overall, we see that <b> the majority of victims and perpetrators were young (aged 18-44 years) involving black male perpetrators and victims. </b> <br>
+
+<em> *Of note, these data included many NA entries particularly for the perpetrators, so analyses were conducted on available data. For the purposes of simplifying race/ethnicity categorization, we collapsed white Hispanic and black Hispanic individuals into a single category titled “Hispanic”. </em><br><br>
+
+### Perpetrator Demographics
+
+#### Age
+<em>48.8% NA</em>
 ```{r}
 nypd_shooting_df %>%
   mutate(
@@ -64,32 +68,55 @@ nypd_shooting_df %>%
     perp_age_group = na_if(perp_age_group, 940),
     perp_age_group = na_if(perp_age_group, "unknown"),
   ) %>%
+  drop_na(perp_age_group) %>%
   group_by(perp_age_group) %>%
   summarise(
     count = n()) %>%
   mutate(
-    percentage = count / sum(count) * 100)
- 
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  knitr::kable()
+```
+
+#### Sex
+<em>42.2% NA</em>
+```{r}
 nypd_shooting_df %>%
    mutate(
     perp_sex = na_if(perp_sex, "u")) %>%
+  drop_na(perp_sex) %>%
   group_by(perp_sex) %>%
   summarise(
     count = n()) %>%
   mutate(
-    percentage = count / sum(count) * 100)
- 
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  knitr::kable()
+```
+
+#### Race/Ethnicity
+<em>43.5% NA</em>
+```{r}
 nypd_shooting_df %>%
   mutate(
     perp_race = recode(perp_race, "black hispanic" = "hispanic", "white hispanic" = "hispanic"), 
     perp_race = na_if(perp_race, "unknown")
   ) %>%
+  drop_na(perp_race) %>%
   group_by(perp_race) %>%
   summarise(
     count = n()) %>%
   mutate(
-    percentage = count / sum(count) * 100)
- 
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  knitr::kable()
+```
+
+### Victim Demographics
+
+#### Age
+<em>NA 0.2%</em>
+```{r}
 nypd_shooting_df %>%
   group_by(vic_age_group) %>%
   mutate(
@@ -98,26 +125,87 @@ nypd_shooting_df %>%
   summarise(
     count = n()) %>%
   mutate(
-    percentage = count / sum(count) * 100)
- 
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  knitr::kable()
+```
+
+#### Sex
+<em>NA 0.04%</em>
+```{r}
 nypd_shooting_df %>%
   group_by(vic_sex) %>%
   mutate(
     vic_sex = na_if(vic_sex, "u")) %>%
+  drop_na(vic_sex) %>%
   summarise(
     count = n()) %>%
   mutate(
-    percentage = count / sum(count) * 100)
- 
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  knitr::kable()
+```
+
+#### Race/Ethnicity
+<em>NA 0.3%</em>
+```{r}
 nypd_shooting_df %>%
    mutate(
     vic_race = recode(vic_race, "black hispanic" = "hispanic", "white hispanic" = "hispanic"), 
     vic_race = na_if(vic_race, "unknown")
   ) %>%
+  drop_na(vic_race) %>%
   group_by(vic_race) %>%
   summarise(
     count = n()) %>%
   mutate(
-    percentage = count / sum(count) * 100)
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  knitr::kable()
 ```
- 
+
+### "Raise the Age" Analysis
+On April 10, 2017, New York State raised the age of criminal responsibility to 18 years of age, ensuring that young people in New York who commit non-violent crimes receive the intervention and evidence-based treatment they need. As of October 2019, New York no longer automatically prosecutes 16- and 17-year-olds as adults. This is known as the ["Raise the Age" law](https://ww2.nycourts.gov/ip/oji/raisetheage.shtml#:~:text=On%20April%2010%2C%202017%2C%20New,evidence%2Dbased%20treatment%20they%20need.). There has been concern that this new policy has resulted in a backlash of [increasing NYC teen shootings](
+https://nypost.com/2022/09/25/raise-the-age-law-is-clearly-behind-soaring-nyc-teen-shootings/).
+
+We sought to explore this trend and see if it holds true according to this dataset. <b> It is sobering to see that the percentage of shooters and victims aged <18 years in NYC has approximately doubled in the five years since "Raise the Age" in our analysis. </b>
+
+```{r, }
+nypd_shooting_df %>%
+  mutate(
+    perp_age_group = na_if(perp_age_group, 1020),
+    perp_age_group = na_if(perp_age_group, 224),
+    perp_age_group = na_if(perp_age_group, 940),
+    perp_age_group = na_if(perp_age_group, "unknown"),
+  ) %>%
+  drop_na(perp_age_group) %>%
+  filter(year >= 2017, perp_age_group == "<18") %>%
+  group_by(perp_age_group, year) %>%
+  summarise(
+    count = n()) %>%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  ggplot(aes(x = year, y = percentage)) +
+  geom_point() + geom_line() +
+  labs(title = "Percentage of Shootings Perpetrated by Youths <18 Years") 
+```
+
+```{r}
+nypd_shooting_df %>%
+  group_by(vic_age_group) %>%
+  mutate(
+    vic_age_group = na_if(vic_age_group, "unknown")
+  ) %>%
+  drop_na(vic_age_group) %>%
+  filter(year >= 2017, vic_age_group == "<18") %>%
+  group_by(vic_age_group, year) %>%
+  summarise(
+    count = n()) %>%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  ggplot(aes(x = year, y = percentage)) +
+  geom_point() + geom_line() +
+  labs(title = "Percentage of Shooting Victims <18 Years") 
+```
