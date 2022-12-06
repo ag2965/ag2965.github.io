@@ -13,10 +13,9 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 Welcome to our final project website for p8105!
  
-The links above describe our project’s dataset present our analyses, a project report, and a screencast. We are really excited about this project.
-
-
+The links above describe our project’s dataset present our analyses, a project report, and a screencast. 
  
+<img src="nycshootings.jpg">
 
  
  
