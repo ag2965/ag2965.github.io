@@ -29,6 +29,7 @@ options(
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
+
 ```{r}
 nypd_shooting_df = 
   read_csv("data/nypd_shooting_data.csv") %>%
@@ -51,6 +52,7 @@ nypd_shooting_df =
 
 Shootings over time
 We wanted to see the longitudinal changes in shootings by borough. This is represented in the stacked bar graph below. 
+
 ```{r}
 nypd_shooting_df %>%
   group_by(year, boro) %>%
@@ -84,8 +86,11 @@ ggplot(aes(y = count, x = year, color = season)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
  
 ggplotly(shootings_seasons)
- ```
- 
+```
+
+
+
+```{r}
 nypd_shooting_df %>%  #not sure if we want to keep this plot
   group_by(month, year) %>%
   summarise(
