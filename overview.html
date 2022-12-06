@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -228,6 +229,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -346,9 +350,6 @@ div.tocify {
   <a href="holidays.html">Holidays</a>
 </li>
 <li>
-  <a href="screencast.html">Animation + Additional Overview</a>
-</li>
-<li>
   <a href="screencast.html">Screencast</a>
 </li>
 <li>
@@ -376,6 +377,14 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Overview</h1>
@@ -383,20 +392,10 @@ div.tocify {
 </div>
 
 
-<p>#Overview</p>
-<p>Below, we have described the demographics of the perpetrators and the
-victims, including age group and race/ethnicity. Of note, these data
-included many NA entries. We see that most victims and perpetrators were
-aged 18-44 years, were of black race, with a high number of incidents
-with black male perpetrators and victims [need to check with Jen that I
-am interpreting her description correctly]. For the purposes of
-simplifying race/ethnicity categorization, we lumped white Hispanic and
-black Hispanic individuals into a single category titled “Hispanic”.</p>
-<p>[need to create a table]</p>
 <pre class="r"><code>nypd_shooting_df = 
   read_csv(&quot;data/nypd_shooting_data.csv&quot;) %&gt;%
   janitor::clean_names() %&gt;%
-  separate(col = occur_date, into = c(&quot;month&quot;, &quot;day&quot;, &quot;year&quot;), sep = &quot;/&quot;) %&gt;% 
+  separate(col = occur_date, into = c(&quot;month&quot;, &quot;day&quot;, &quot;year&quot;), sep = &quot;/&quot;) %&gt;%
   separate(col = occur_time, into = c(&quot;hour&quot;, &quot;minute&quot;, &quot;second&quot;), sep = &quot;:&quot;) %&gt;%
   mutate(across(where(is.character), tolower),
          month = as.numeric(month),
@@ -410,16 +409,22 @@ black Hispanic individuals into a single category titled “Hispanic”.</p>
          boro = as.factor(boro), 
          boro = fct_relevel(boro, &quot;manhattan&quot;, &quot;brooklyn&quot;, &quot;bronx&quot;, &quot;queens&quot;, &quot;staten island&quot;)) %&gt;%
   select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())</code></pre>
-<pre><code>## Rows: 25596 Columns: 19
-## ── Column specification ────────────────────────────────────
-## Delimiter: &quot;,&quot;
-## chr  (10): OCCUR_DATE, BORO, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PERP_R...
-## dbl   (7): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, X_COORD_CD, Y_COORD_CD...
-## lgl   (1): STATISTICAL_MURDER_FLAG
-## time  (1): OCCUR_TIME
-## 
-## ℹ Use `spec()` to retrieve the full column specification for this data.
-## ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
+<p>Here is a summary of the overall demographics of the perpetrators and
+the victims involved in NYC shootings, including age, sex, and
+race/ethnicity. There were a total of 25596 shootings from 2016 to 2021
+reported by the NYPD. Overall, we see that <b> the majority of victims
+and perpetrators were young (aged 18-44 years) involving black male
+perpetrators and victims. </b> <br></p>
+<p><em> *Of note, these data included many NA entries particularly for
+the perpetrators, so analyses were conducted on available data. For the
+purposes of simplifying race/ethnicity categorization, we collapsed
+white Hispanic and black Hispanic individuals into a single category
+titled “Hispanic”. </em><br><br></p>
+<div id="perpetrator-demographics" class="section level3">
+<h3>Perpetrator Demographics</h3>
+<div id="age" class="section level4">
+<h4>Age</h4>
+<p><em>48.8% NA</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
   mutate(
     perp_age_group = na_if(perp_age_group, 1020),
@@ -427,53 +432,146 @@ black Hispanic individuals into a single category titled “Hispanic”.</p>
     perp_age_group = na_if(perp_age_group, 940),
     perp_age_group = na_if(perp_age_group, &quot;unknown&quot;),
   ) %&gt;%
+  drop_na(perp_age_group) %&gt;%
   group_by(perp_age_group) %&gt;%
   summarise(
     count = n()) %&gt;%
   mutate(
-    percentage = count / sum(count) * 100)</code></pre>
-<pre><code>## # A tibble: 6 × 3
-##   perp_age_group count percentage
-##   &lt;chr&gt;          &lt;int&gt;      &lt;dbl&gt;
-## 1 &lt;18             1463      5.72 
-## 2 18-24           5844     22.8  
-## 3 25-44           5202     20.3  
-## 4 45-64            535      2.09 
-## 5 65+               57      0.223
-## 6 &lt;NA&gt;           12495     48.8</code></pre>
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">perp_age_group</th>
+<th align="right">count</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">&lt;18</td>
+<td align="right">1463</td>
+<td align="right">11.2</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="right">5844</td>
+<td align="right">44.6</td>
+</tr>
+<tr class="odd">
+<td align="left">25-44</td>
+<td align="right">5202</td>
+<td align="right">39.7</td>
+</tr>
+<tr class="even">
+<td align="left">45-64</td>
+<td align="right">535</td>
+<td align="right">4.1</td>
+</tr>
+<tr class="odd">
+<td align="left">65+</td>
+<td align="right">57</td>
+<td align="right">0.4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sex" class="section level4">
+<h4>Sex</h4>
+<p><em>42.2% NA</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
    mutate(
     perp_sex = na_if(perp_sex, &quot;u&quot;)) %&gt;%
+  drop_na(perp_sex) %&gt;%
   group_by(perp_sex) %&gt;%
   summarise(
     count = n()) %&gt;%
   mutate(
-    percentage = count / sum(count) * 100)</code></pre>
-<pre><code>## # A tibble: 3 × 3
-##   perp_sex count percentage
-##   &lt;chr&gt;    &lt;int&gt;      &lt;dbl&gt;
-## 1 f          371       1.45
-## 2 m        14416      56.3 
-## 3 &lt;NA&gt;     10809      42.2</code></pre>
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">perp_sex</th>
+<th align="right">count</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">f</td>
+<td align="right">371</td>
+<td align="right">2.5</td>
+</tr>
+<tr class="even">
+<td align="left">m</td>
+<td align="right">14416</td>
+<td align="right">97.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raceethnicity" class="section level4">
+<h4>Race/Ethnicity</h4>
+<p><em>43.5% NA</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
   mutate(
     perp_race = recode(perp_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;), 
     perp_race = na_if(perp_race, &quot;unknown&quot;)
   ) %&gt;%
+  drop_na(perp_race) %&gt;%
   group_by(perp_race) %&gt;%
   summarise(
     count = n()) %&gt;%
   mutate(
-    percentage = count / sum(count) * 100)</code></pre>
-<pre><code>## # A tibble: 6 × 3
-##   perp_race                      count percentage
-##   &lt;chr&gt;                          &lt;int&gt;      &lt;dbl&gt;
-## 1 american indian/alaskan native     2    0.00781
-## 2 asian / pacific islander         141    0.551  
-## 3 black                          10668   41.7    
-## 4 hispanic                        3367   13.2    
-## 5 white                            272    1.06   
-## 6 &lt;NA&gt;                           11146   43.5</code></pre>
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">perp_race</th>
+<th align="right">count</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">american indian/alaskan native</td>
+<td align="right">2</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">asian / pacific islander</td>
+<td align="right">141</td>
+<td align="right">1.0</td>
+</tr>
+<tr class="odd">
+<td align="left">black</td>
+<td align="right">10668</td>
+<td align="right">73.8</td>
+</tr>
+<tr class="even">
+<td align="left">hispanic</td>
+<td align="right">3367</td>
+<td align="right">23.3</td>
+</tr>
+<tr class="odd">
+<td align="left">white</td>
+<td align="right">272</td>
+<td align="right">1.9</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="victim-demographics" class="section level3">
+<h3>Victim Demographics</h3>
+<div id="age-1" class="section level4">
+<h4>Age</h4>
+<p><em>NA 0.2%</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
   group_by(vic_age_group) %&gt;%
   mutate(
@@ -482,49 +580,195 @@ black Hispanic individuals into a single category titled “Hispanic”.</p>
   summarise(
     count = n()) %&gt;%
   mutate(
-    percentage = count / sum(count) * 100)</code></pre>
-<pre><code>## # A tibble: 6 × 3
-##   vic_age_group count percentage
-##   &lt;chr&gt;         &lt;int&gt;      &lt;dbl&gt;
-## 1 &lt;18            2681     10.5  
-## 2 18-24          9604     37.5  
-## 3 25-44         11386     44.5  
-## 4 45-64          1698      6.63 
-## 5 65+             167      0.652
-## 6 &lt;NA&gt;             60      0.234</code></pre>
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">vic_age_group</th>
+<th align="right">count</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">&lt;18</td>
+<td align="right">2681</td>
+<td align="right">10.5</td>
+</tr>
+<tr class="even">
+<td align="left">18-24</td>
+<td align="right">9604</td>
+<td align="right">37.5</td>
+</tr>
+<tr class="odd">
+<td align="left">25-44</td>
+<td align="right">11386</td>
+<td align="right">44.5</td>
+</tr>
+<tr class="even">
+<td align="left">45-64</td>
+<td align="right">1698</td>
+<td align="right">6.6</td>
+</tr>
+<tr class="odd">
+<td align="left">65+</td>
+<td align="right">167</td>
+<td align="right">0.7</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="right">60</td>
+<td align="right">0.2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="sex-1" class="section level4">
+<h4>Sex</h4>
+<p><em>NA 0.04%</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
   group_by(vic_sex) %&gt;%
   mutate(
     vic_sex = na_if(vic_sex, &quot;u&quot;)) %&gt;%
+  drop_na(vic_sex) %&gt;%
   summarise(
     count = n()) %&gt;%
   mutate(
-    percentage = count / sum(count) * 100)</code></pre>
-<pre><code>## # A tibble: 3 × 3
-##   vic_sex count percentage
-##   &lt;chr&gt;   &lt;int&gt;      &lt;dbl&gt;
-## 1 f        2403     9.39  
-## 2 m       23182    90.6   
-## 3 &lt;NA&gt;       11     0.0430</code></pre>
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">vic_sex</th>
+<th align="right">count</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">f</td>
+<td align="right">2403</td>
+<td align="right">9.4</td>
+</tr>
+<tr class="even">
+<td align="left">m</td>
+<td align="right">23182</td>
+<td align="right">90.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="raceethnicity-1" class="section level4">
+<h4>Race/Ethnicity</h4>
+<p><em>NA 0.3%</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
    mutate(
     vic_race = recode(vic_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;), 
     vic_race = na_if(vic_race, &quot;unknown&quot;)
   ) %&gt;%
+  drop_na(vic_race) %&gt;%
   group_by(vic_race) %&gt;%
   summarise(
     count = n()) %&gt;%
   mutate(
-    percentage = count / sum(count) * 100)</code></pre>
-<pre><code>## # A tibble: 6 × 3
-##   vic_race                       count percentage
-##   &lt;chr&gt;                          &lt;int&gt;      &lt;dbl&gt;
-## 1 american indian/alaskan native     9     0.0352
-## 2 asian / pacific islander         354     1.38  
-## 3 black                          18281    71.4   
-## 4 hispanic                        6227    24.3   
-## 5 white                            660     2.58  
-## 6 &lt;NA&gt;                              65     0.254</code></pre>
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  knitr::kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">vic_race</th>
+<th align="right">count</th>
+<th align="right">percentage</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">american indian/alaskan native</td>
+<td align="right">9</td>
+<td align="right">0.0</td>
+</tr>
+<tr class="even">
+<td align="left">asian / pacific islander</td>
+<td align="right">354</td>
+<td align="right">1.4</td>
+</tr>
+<tr class="odd">
+<td align="left">black</td>
+<td align="right">18281</td>
+<td align="right">71.6</td>
+</tr>
+<tr class="even">
+<td align="left">hispanic</td>
+<td align="right">6227</td>
+<td align="right">24.4</td>
+</tr>
+<tr class="odd">
+<td align="left">white</td>
+<td align="right">660</td>
+<td align="right">2.6</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="raise-the-age-analysis" class="section level3">
+<h3>“Raise the Age” Analysis</h3>
+<p>On April 10, 2017, New York State raised the age of criminal
+responsibility to 18 years of age, ensuring that young people in New
+York who commit non-violent crimes receive the intervention and
+evidence-based treatment they need. As of October 2019, New York no
+longer automatically prosecutes 16- and 17-year-olds as adults. This is
+known as the <a
+href="https://ww2.nycourts.gov/ip/oji/raisetheage.shtml#:~:text=On%20April%2010%2C%202017%2C%20New,evidence%2Dbased%20treatment%20they%20need.">“Raise
+the Age” law</a>. There has been concern that this new policy has
+resulted in a backlash of <a
+href="https://nypost.com/2022/09/25/raise-the-age-law-is-clearly-behind-soaring-nyc-teen-shootings/">increasing
+NYC teen shootings</a>.</p>
+<p>We sought to explore this trend and see if it holds true according to
+this dataset. <b> It is sobering to see that the percentage of shooters
+and victims aged &lt;18 years in NYC has approximately doubled in the
+five years since “Raise the Age” in our analysis. </b></p>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+  mutate(
+    perp_age_group = na_if(perp_age_group, 1020),
+    perp_age_group = na_if(perp_age_group, 224),
+    perp_age_group = na_if(perp_age_group, 940),
+    perp_age_group = na_if(perp_age_group, &quot;unknown&quot;),
+  ) %&gt;%
+  drop_na(perp_age_group) %&gt;%
+  filter(year &gt;= 2017, perp_age_group == &quot;&lt;18&quot;) %&gt;%
+  group_by(perp_age_group, year) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  ggplot(aes(x = year, y = percentage)) +
+  geom_point() + geom_line() +
+  labs(title = &quot;Percentage of Shootings Perpetrated by Youths &lt;18 Years&quot;) </code></pre>
+<p><img src="overview_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+<pre class="r"><code>nypd_shooting_df %&gt;%
+  group_by(vic_age_group) %&gt;%
+  mutate(
+    vic_age_group = na_if(vic_age_group, &quot;unknown&quot;)
+  ) %&gt;%
+  drop_na(vic_age_group) %&gt;%
+  filter(year &gt;= 2017, vic_age_group == &quot;&lt;18&quot;) %&gt;%
+  group_by(vic_age_group, year) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  ggplot(aes(x = year, y = percentage)) +
+  geom_point() + geom_line() +
+  labs(title = &quot;Percentage of Shooting Victims &lt;18 Years&quot;) </code></pre>
+<p><img src="overview_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+</div>
 
 
 
@@ -561,6 +805,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
