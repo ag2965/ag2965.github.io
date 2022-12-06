@@ -5,13 +5,9 @@ output:
     toc: true
     toc_float: true
     theme: cerulean
-editor_options: 
-  chunk_output_type: inline
+    code_folding: "hide"
 ---
 
-Scatterplot
-We created a scatterplot of the location (latitude and longitude) of the shootings in the five boroughs of NYC. We overlaid this onto a map of NYC using the leaflet library. Using plotly, we were also able to give information on the month, year, borough, and the category of location (private house, public housing, restaurant, etc) in the text box that appears when hovering over the plot.
- 
 ```{r setup, include = FALSE}
 library(tidyverse)
 library(patchwork)
@@ -21,6 +17,7 @@ library(leaflet)
 knitr::opts_chunk$set(
 echo = TRUE,
 warning = FALSE,
+message = FALSE,
   fig.width = 6,
   fig.asp = .6,
   out.width = "90%")
@@ -34,11 +31,12 @@ options(
 scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
+
 ```{r}
 nypd_shooting_df = 
   read_csv("data/nypd_shooting_data.csv") %>%
   janitor::clean_names() %>%
-  separate(col = occur_date, into = c("month", "day", "year"), sep = "/") %>% 
+  separate(col = occur_date, into = c("month", "day", "year"), sep = "/") %>%
   separate(col = occur_time, into = c("hour", "minute", "second"), sep = ":") %>%
   mutate(across(where(is.character), tolower),
          month = as.numeric(month),
@@ -54,6 +52,9 @@ nypd_shooting_df =
   select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())
 ```
 
+### Scatterplot
+Here is a scatterplot of all shooting incidents using the latitude and longitude data. We overlaid these data points onto a map of NYC using the leaflet library. Information on the month, year, borough, and the category of location (private house, public housing, restaurant, etc) is shown in the text box that appears when hovering over the plot.
+
 ```{r}
 pal <- colorFactor("viridis", nypd_shooting_df$year)
  
@@ -68,8 +69,8 @@ pal <- colorFactor("viridis", nypd_shooting_df$year)
     title = "year")
 ```
  
-Cluster map
-We further explored the map by identifying hotspots of shootings within each region. These are indicated in the cluster map below. When you zoom in on the map, the clusters in each specific region become more granular. Go ahead, give it a try. 
+### Cluster Map
+We further explored the map by identifying hot spots of shootings within each region. These are indicated in the cluster map below. When you zoom in on the map, the clusters in each specific region become more granular. Go ahead, give it a try! 
  
 ```{r}
 nypd_shooting_df %>%
@@ -80,22 +81,45 @@ nypd_shooting_df %>%
   addMarkers(
   clusterOptions = markerClusterOptions())
 ```
- 
-Shootings by location type
-We wanted to see which location type was most prone to shootings? The map below shows that the following were the most common locations for shootings: multi-dwelling public housing and apartment buildings, private houses, grocery stores/bodegas, and bars/night clubs.
- 
+
+### Shootings by Borough
+Brooklyn had the highest number of shootings across all boroughs, while Staten Island had the lowest number. We see that the number of shootings universally spiked in 2020. This is consistent with [reports](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9095435/) that violence erupted in the midst of the COVID-19 pandemic and social distancing measures, which collided with a period of social unrest following the murder of George Floyd in Minneapolis. 
 ```{r}
-nypd_shooting_df %>% 
-  count(location_desc) %>% 
-  mutate(location_desc = fct_reorder(location_desc, n)) %>% 
-na.omit%>%
-  plot_ly(x = ~location_desc, y = ~n, color = ~location_desc, type = "bar", colors = "viridis")
+boro_graph = 
+  nypd_shooting_df %>%
+  group_by(year, boro) %>%
+  summarise(
+    count = n()) %>%
+  ggplot(aes(fill = boro, y = count, x = year)) +
+  geom_bar(position = "stack", stat = "identity") + 
+  labs(title = "Number of Shootings by Boro from 2006-2021")
+
+
+ggplotly(boro_graph)
 ```
+
+### Shootings by Location Type
+We wanted to see which location type was most prone to shootings. The table below shows that the following were the most common locations for shootings: multi-dwelling public housing and apartment buildings, private houses, grocery/bodegas, and bars/night clubs. Of note, 59.2% of entries were NA.
  
-Top shooting locations by borough
-We wanted to further explore the top 5 shooting locations by borough. In all boroughs, multi-dwelling public housing sites had the highest proportion of shootings, with multi-dwelling apartment buildings had the second highest proportion of shootings. Bars and nightclubs more commonly had shooting incidents in Manhattan, Bronx, and Queens, but not in Brooklyn or Staten Island.  
 ```{r}
 nypd_shooting_df %>%
+  na_if("none") %>%
+  group_by(location_desc) %>%
+  summarise(
+    count = n()) %>%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  arrange(desc(percentage)) %>%
+  slice(1:10) %>%
+  drop_na(location_desc) %>%
+  knitr::kable()
+```
+ 
+Next, we wanted to further explore the top 5 shooting location types by borough. In all boroughs, multi-dwelling public housing sites had the highest proportion of shootings, and multi-dwelling apartment buildings had the second highest proportion of shootings. Bars and nightclubs more commonly had shooting incidents in Manhattan, Bronx, and Queens, but not in Brooklyn or Staten Island.  
+```{r}
+location_borough = 
+  nypd_shooting_df %>%
   na_if("none") %>%
   group_by(boro, location_desc) %>%
   summarise(
@@ -107,5 +131,8 @@ nypd_shooting_df %>%
   drop_na(location_desc) %>%
   ggplot(aes(fill = location_desc, y = count, x = boro)) +
   geom_bar(position = "stack", stat = "identity") + 
-  labs(title = "Top 5 shooting locations by boro")
+  labs(title = "Top 5 Shooting Location Types by Boro") +
+  theme(legend.position = "right")
+
+ggplotly(location_borough)
 ```

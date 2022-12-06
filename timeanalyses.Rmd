@@ -5,6 +5,7 @@ output:
     toc: true
     toc_float: true
     theme: cerulean
+    code_folding: "hide"
 ---
 
 ```{r setup, include = FALSE}
@@ -16,6 +17,7 @@ library(leaflet)
 knitr::opts_chunk$set(
 echo = TRUE,
 warning = FALSE,
+message = FALSE,
   fig.width = 6,
   fig.asp = .6,
   out.width = "90%")
@@ -50,21 +52,40 @@ nypd_shooting_df =
   select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())
 ```
 
-Shootings over time
-We wanted to see the longitudinal changes in shootings by borough. This is represented in the stacked bar graph below. 
+### Shootings Over Time
+We wanted to see the longitudinal changes in shootings by borough. This is represented in the stacked bar graph below. There is a decline in shootings from 2005 to 2019, then a sharp increase from 2020 onwards.
 
 ```{r}
-nypd_shooting_df %>%
+shooting_year = 
+  nypd_shooting_df %>%
   group_by(year, boro) %>%
   summarise(
     count = n()) %>%
   ggplot(aes(fill = boro, y = count, x = year)) +
   geom_bar(position = "stack", stat = "identity") + 
   labs(title = "Number of shootings by boro from 2006-2021")
+
+ggplotly(shooting_year)
 ```
  
-Shootings and murders by season
-We wanted to see if shootings and shootings that resulted in murders were more likely during certain seasons. The line plots below show that shootings were more likely during the summer, and that summer of 2020 had the highest number of shooting incidents as compared to any other timeframe. 
+### Which year was most deadly?
+2006 then more recently 2020 and 2021 were most deadly.
+```{r}
+murder_year = 
+  nypd_shooting_df %>%
+  filter(statistical_murder_flag == TRUE) %>%
+  group_by(year, boro) %>%
+  summarise(
+    count = n()) %>%
+  ggplot(aes(fill = boro, y = count, x = year)) +
+  geom_bar(position = "stack", stat = "identity") + 
+  labs(title = "Number of Murders by Boro from 2006-2021")
+
+ggplotly(murder_year)
+```
+
+### Seasonal Variations
+We wanted to see if shootings and murders were more likely during certain seasons. The line plots below show that shootings were more likely during the summer, and that summer of 2020 had the highest number of shooting incidents as compared to any other timeframe. 
  
 ```{r}
 nypd_shooting_seasons = nypd_shooting_df %>%
@@ -82,36 +103,20 @@ shootings_seasons = nypd_shooting_seasons %>%
 ggplot(aes(y = count, x = year, color = season)) +
   geom_point() + geom_line() +
   facet_grid(cols = vars(season)) + 
-  labs(title = "# of shootings by season(2006-2021)") +
+  labs(title = "Shootings by Season from 2006-2021") +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
  
 ggplotly(shootings_seasons)
 ```
 
+### Which season is most deadly?
+Murders followed a similar pattern, but the summer of 2020 (and apparently 2010) also had a relatively high rate of murders.
 
-
-```{r}
-nypd_shooting_df %>%  #not sure if we want to keep this plot
-  group_by(month, year) %>%
-  summarise(
-    count = n()) %>%
-ggplot(aes(y = count, x = month, color = year)) +
-  geom_point() + 
-  facet_grid(cols = vars(month)) + 
-  labs(title = "# of shootings by month (2006-2021)") + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
-```
-
-
-Murders followed a similar pattern, but the summer of 2010 also had a relatively high rate of murders.
 ```{r}
 murders_df = nypd_shooting_df %>%
   filter(statistical_murder_flag == TRUE) %>%
   janitor::clean_names()
 
-```
-
-```{r}
 nypd_murders_season = murders_df %>%
   mutate(
     season = case_when(
@@ -127,29 +132,36 @@ murders_seasons = nypd_murders_season %>%
 ggplot(aes(y = count, x = year, color = season)) +
   geom_point() + geom_line() +
   facet_grid(cols = vars(season)) + 
-  labs(title = "# of murders by season (2006-2021)") + 
+  labs(title = "Murders by Season from 2006-2021") + 
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
  
 ggplotly(murders_seasons)
- 
-shootings_seasons + murders_seasons
 ```
  
-Time of day of shooting
+We've unfortunately all seen the [headlines](https://www.nytimes.com/2020/09/02/nyregion/nyc-shootings-murders.html) (and the numbers here back it up). We quote here an excerpt from a NYT article published in September 2020:
+
+<br> <center>
+<em>“Violent crime always rises in the summer, but this year has been extreme in New York. Since May, the city has recorded 791 shootings, a more than 140 percent increase over the same period in 2019. The 180 murders seen between May and August is a more than 51 percent increase compared to 2019.
+In August alone, there were 242 shootings in the city, compared with 91 last year, and the number of murders rose from 36 to 53. As a result, the city surpassed 1,000 shootings before Labor Day, making it the worst year for gun violence since 2015, with four months left to go.”</em></center><br>
+
+### Time of Day of Shootings
 We were also interested in seeing the time of day of shootings. In the figure below, we have plotted the time on the X axis and the number of incidents on the Y axis. We can see that the lowest number of shootings occur between 6 am and 1 pm, while the late evening and early morning hours are when most incidents take place.
  
 ```{r}
-nypd_shooting_df %>%
+shooting_time = 
+  nypd_shooting_df %>%
   group_by(minute_calc) %>%
   summarise(
     count = n()) %>%
   ggplot(
     aes(x = minute_calc, y = count)) +
       geom_line(alpha = .5) +
-  labs(title = "NYC shootings by time of day",
-       x = "Minutes",
+  labs(title = "NYC Shootings by Time of Day",
+       x = "Time",
        y = "Shooting Count") +
   scale_x_continuous(
     breaks = c(0, 180, 360, 540, 720, 900, 1080, 1260, 1440),
   labels = c("00:00", "03:00", "06:00", "09:00", "12:00", "15:00", "18:00", "21:00", "24:00"))
+
+ggplotly(shooting_time)
 ```
