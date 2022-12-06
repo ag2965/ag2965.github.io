@@ -13,6 +13,8 @@ navbar:
       href: timeanalyses.html
     - text: "Holidays"
       href: holidays.html 
+    - text: "Animation + Additional Overview"
+      href: screencast.html 
     - text: "Screencast"
       href: screencast.html 
     - text: "Project Report"
