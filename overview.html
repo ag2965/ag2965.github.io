@@ -571,7 +571,7 @@ titled “Hispanic”. </em><br><br></p>
 <h3>Victim Demographics</h3>
 <div id="age-1" class="section level4">
 <h4>Age</h4>
-<p><em>NA 0.2%</em></p>
+<p><em>0.2% NA</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
   group_by(vic_age_group) %&gt;%
   mutate(
@@ -627,7 +627,7 @@ titled “Hispanic”. </em><br><br></p>
 </div>
 <div id="sex-1" class="section level4">
 <h4>Sex</h4>
-<p><em>NA 0.04%</em></p>
+<p><em>0.04% NA</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
   group_by(vic_sex) %&gt;%
   mutate(
@@ -663,7 +663,7 @@ titled “Hispanic”. </em><br><br></p>
 </div>
 <div id="raceethnicity-1" class="section level4">
 <h4>Race/Ethnicity</h4>
-<p><em>NA 0.3%</em></p>
+<p><em>0.3% NA</em></p>
 <pre class="r"><code>nypd_shooting_df %&gt;%
    mutate(
     vic_race = recode(vic_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;), 

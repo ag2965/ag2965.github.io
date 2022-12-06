@@ -115,7 +115,7 @@ nypd_shooting_df %>%
 ### Victim Demographics
 
 #### Age
-<em>NA 0.2%</em>
+<em>0.2% NA</em>
 ```{r}
 nypd_shooting_df %>%
   group_by(vic_age_group) %>%
@@ -131,7 +131,7 @@ nypd_shooting_df %>%
 ```
 
 #### Sex
-<em>NA 0.04%</em>
+<em>0.04% NA</em>
 ```{r}
 nypd_shooting_df %>%
   group_by(vic_sex) %>%
@@ -147,7 +147,7 @@ nypd_shooting_df %>%
 ```
 
 #### Race/Ethnicity
-<em>NA 0.3%</em>
+<em>0.3% NA</em>
 ```{r}
 nypd_shooting_df %>%
    mutate(
