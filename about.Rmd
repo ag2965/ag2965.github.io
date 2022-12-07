@@ -10,7 +10,7 @@ output:
 ### NYC Shootings Dataset
 This dataset, which is publicly available on the [NYC Open Data website](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8), includes every shooting incident that took place in New York City from 2006 to 2021. The Office of Management Analysis and Planning manually extracts and reviews the data on a quarterly basis before posting it on the NYPD website. 
 
-Each record describes a shooting incident in one of the five NYC boroughs and offers demographic details about the victim and perpetrator, the time and location (latitude and longitude, type of property, etc) of the incident, and whether the shooting resulted in death. The NYC Open Data website offers the data so that the public can “explore the nature of shooting/criminal activity.” Our team of P8105 students was up to this challenge and performed a variety of exploratory analyses, which are described above. 
+Each record describes a shooting incident in one of the five NYC boroughs and offers demographic details about the victim and perpetrator, the time and location (latitude and longitude, type of property, etc) of the incident, and whether the shooting resulted in death. The NYC Open Data website offers the data so that the public can “explore the nature of shooting/criminal activity.” Our team of P8105 students was up to this challenge and performed a variety of exploratory analyses. 
 
 <br>
 

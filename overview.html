@@ -729,10 +729,32 @@ resulted in a backlash of <a
 href="https://nypost.com/2022/09/25/raise-the-age-law-is-clearly-behind-soaring-nyc-teen-shootings/">increasing
 NYC teen shootings</a>.</p>
 <p>We sought to explore this trend and see if it holds true according to
-this dataset. <b> It is sobering to see that the percentage of shooters
-and victims aged &lt;18 years in NYC has approximately doubled in the
-five years since “Raise the Age” in our analysis. </b></p>
-<pre class="r"><code>nypd_shooting_df %&gt;%
+this dataset. <b> It is sobering to see that the number and percentage
+of shooters and victims aged &lt;18 years in NYC has approximately
+doubled in the five years since “Raise the Age” in our analysis.
+</b></p>
+<pre class="r"><code>number_youthperp = 
+  nypd_shooting_df %&gt;%
+  mutate(
+    perp_age_group = na_if(perp_age_group, 1020),
+    perp_age_group = na_if(perp_age_group, 224),
+    perp_age_group = na_if(perp_age_group, 940),
+    perp_age_group = na_if(perp_age_group, &quot;unknown&quot;),
+  ) %&gt;%
+  drop_na(perp_age_group) %&gt;%
+  filter(year &gt;= 2017, perp_age_group == &quot;&lt;18&quot;) %&gt;%
+  group_by(perp_age_group, year) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  ggplot(aes(x = year, y = count)) +
+  geom_point() + geom_line() +
+  labs(title = &quot;# Shootings by &lt;18 Year Olds&quot;) 
+
+percent_youthperp = 
+nypd_shooting_df %&gt;%
   mutate(
     perp_age_group = na_if(perp_age_group, 1020),
     perp_age_group = na_if(perp_age_group, 224),
@@ -749,9 +771,30 @@ five years since “Raise the Age” in our analysis. </b></p>
     percentage = round(percentage, digits = 1)) %&gt;%
   ggplot(aes(x = year, y = percentage)) +
   geom_point() + geom_line() +
-  labs(title = &quot;Percentage of Shootings Perpetrated by Youths &lt;18 Years&quot;) </code></pre>
+  labs(title = &quot;% Shootings by &lt;18 Year Olds&quot;) 
+
+number_youthperp + percent_youthperp</code></pre>
 <p><img src="overview_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
-<pre class="r"><code>nypd_shooting_df %&gt;%
+<pre class="r"><code>number_youthvic = 
+  nypd_shooting_df %&gt;%
+  group_by(vic_age_group) %&gt;%
+  mutate(
+    vic_age_group = na_if(vic_age_group, &quot;unknown&quot;)
+  ) %&gt;%
+  drop_na(vic_age_group) %&gt;%
+  filter(year &gt;= 2017, vic_age_group == &quot;&lt;18&quot;) %&gt;%
+  group_by(vic_age_group, year) %&gt;%
+  summarise(
+    count = n()) %&gt;%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %&gt;%
+  ggplot(aes(x = year, y = count)) +
+  geom_point() + geom_line() +
+  labs(title = &quot;# Shooting Victims &lt;18 Years&quot;) 
+
+percent_vicyouth = 
+  nypd_shooting_df %&gt;%
   group_by(vic_age_group) %&gt;%
   mutate(
     vic_age_group = na_if(vic_age_group, &quot;unknown&quot;)
@@ -766,7 +809,9 @@ five years since “Raise the Age” in our analysis. </b></p>
     percentage = round(percentage, digits = 1)) %&gt;%
   ggplot(aes(x = year, y = percentage)) +
   geom_point() + geom_line() +
-  labs(title = &quot;Percentage of Shooting Victims &lt;18 Years&quot;) </code></pre>
+  labs(title = &quot;% Shooting Victims &lt;18 Years&quot;) 
+
+number_youthvic + percent_vicyouth</code></pre>
 <p><img src="overview_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 </div>
 

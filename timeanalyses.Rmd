@@ -68,6 +68,24 @@ shooting_year =
 ggplotly(shooting_year)
 ```
  
+This is the same data depicted as line graphs by borough to provide another means of visualization.
+
+```{r}
+shooting_line = 
+  nypd_shooting_df %>%
+  group_by(year, boro) %>%
+  summarise(
+    count = n()) %>%
+  ggplot(aes(y = count, x = year, group = boro, color = boro)) +
+  geom_point() + geom_line() +
+  facet_grid(cols = vars(boro)) + 
+  labs(title = "Number of Shootings by Boro from 2006-2021") +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.position = "none")
+
+ggplotly(shooting_line)
+```
+
 ### Which year was most deadly?
 Similarly, 2006 then more recently 2020 and 2021 were most deadly.
 ```{r}
@@ -104,7 +122,8 @@ ggplot(aes(y = count, x = year, color = season)) +
   geom_point() + geom_line() +
   facet_grid(cols = vars(season)) + 
   labs(title = "Shootings by Season from 2006-2021") +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.position = "none")
  
 ggplotly(shootings_seasons)
 ```
@@ -133,7 +152,8 @@ ggplot(aes(y = count, x = year, color = season)) +
   geom_point() + geom_line() +
   facet_grid(cols = vars(season)) + 
   labs(title = "Murders by Season from 2006-2021") + 
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust = 1)) +
+  theme(legend.position = "none")
  
 ggplotly(murders_seasons)
 ```

@@ -168,9 +168,30 @@ nypd_shooting_df %>%
 On April 10, 2017, New York State raised the age of criminal responsibility to 18 years of age, ensuring that young people in New York who commit non-violent crimes receive the intervention and evidence-based treatment they need. As of October 2019, New York no longer automatically prosecutes 16- and 17-year-olds as adults. This is known as the ["Raise the Age" law](https://ww2.nycourts.gov/ip/oji/raisetheage.shtml#:~:text=On%20April%2010%2C%202017%2C%20New,evidence%2Dbased%20treatment%20they%20need.). There has been concern that this new policy has resulted in a backlash of [increasing NYC teen shootings](
 https://nypost.com/2022/09/25/raise-the-age-law-is-clearly-behind-soaring-nyc-teen-shootings/).
 
-We sought to explore this trend and see if it holds true according to this dataset. <b> It is sobering to see that the percentage of shooters and victims aged <18 years in NYC has approximately doubled in the five years since "Raise the Age" in our analysis. </b>
+We sought to explore this trend and see if it holds true according to this dataset. <b> It is sobering to see that the number and percentage of shooters and victims aged <18 years in NYC has approximately doubled in the five years since "Raise the Age" in our analysis. </b>
 
-```{r, }
+```{r}
+number_youthperp = 
+  nypd_shooting_df %>%
+  mutate(
+    perp_age_group = na_if(perp_age_group, 1020),
+    perp_age_group = na_if(perp_age_group, 224),
+    perp_age_group = na_if(perp_age_group, 940),
+    perp_age_group = na_if(perp_age_group, "unknown"),
+  ) %>%
+  drop_na(perp_age_group) %>%
+  filter(year >= 2017, perp_age_group == "<18") %>%
+  group_by(perp_age_group, year) %>%
+  summarise(
+    count = n()) %>%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  ggplot(aes(x = year, y = count)) +
+  geom_point() + geom_line() +
+  labs(title = "# Shootings by <18 Year Olds") 
+
+percent_youthperp = 
 nypd_shooting_df %>%
   mutate(
     perp_age_group = na_if(perp_age_group, 1020),
@@ -188,11 +209,32 @@ nypd_shooting_df %>%
     percentage = round(percentage, digits = 1)) %>%
   ggplot(aes(x = year, y = percentage)) +
   geom_point() + geom_line() +
-  labs(title = "Percentage of Shootings Perpetrated by Youths <18 Years") 
+  labs(title = "% Shootings by <18 Year Olds") 
+
+number_youthperp + percent_youthperp
 ```
 
 ```{r}
-nypd_shooting_df %>%
+number_youthvic = 
+  nypd_shooting_df %>%
+  group_by(vic_age_group) %>%
+  mutate(
+    vic_age_group = na_if(vic_age_group, "unknown")
+  ) %>%
+  drop_na(vic_age_group) %>%
+  filter(year >= 2017, vic_age_group == "<18") %>%
+  group_by(vic_age_group, year) %>%
+  summarise(
+    count = n()) %>%
+  mutate(
+    percentage = count / sum(count) * 100,
+    percentage = round(percentage, digits = 1)) %>%
+  ggplot(aes(x = year, y = count)) +
+  geom_point() + geom_line() +
+  labs(title = "# Shooting Victims <18 Years") 
+
+percent_vicyouth = 
+  nypd_shooting_df %>%
   group_by(vic_age_group) %>%
   mutate(
     vic_age_group = na_if(vic_age_group, "unknown")
@@ -207,5 +249,7 @@ nypd_shooting_df %>%
     percentage = round(percentage, digits = 1)) %>%
   ggplot(aes(x = year, y = percentage)) +
   geom_point() + geom_line() +
-  labs(title = "Percentage of Shooting Victims <18 Years") 
+  labs(title = "% Shooting Victims <18 Years") 
+
+number_youthvic + percent_vicyouth
 ```
