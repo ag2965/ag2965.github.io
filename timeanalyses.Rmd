@@ -76,7 +76,7 @@ shooting_line =
   group_by(year, boro) %>%
   summarise(
     count = n()) %>%
-  ggplot(aes(y = count, x = year, group = boro, color = boro)) +
+  ggplot(aes(y = count, x = year, color = boro)) +
   geom_point() + geom_line() +
   facet_grid(cols = vars(boro)) + 
   labs(title = "Number of Shootings by Boro from 2006-2021") +
