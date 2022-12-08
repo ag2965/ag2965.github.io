@@ -33,6 +33,7 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
@@ -228,6 +229,9 @@ $(document).ready(function () {
 </style>
 
 <!-- code folding -->
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 
 
 
@@ -373,6 +377,14 @@ div.tocify {
 
 <div id="header">
 
+<div class="btn-group pull-right float-right">
+<button type="button" class="btn btn-default btn-xs btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
+<ul class="dropdown-menu dropdown-menu-right" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
+</ul>
+</div>
+
 
 
 <h1 class="title toc-ignore">Holidays</h1>
@@ -380,18 +392,31 @@ div.tocify {
 </div>
 
 
-<p>We were interested to see if shooting incidents occurred more
-commonly on holidays over other days of the year. We included the XX
-major national holidays: [need to fill in] Since the date of each
-holiday differed each year, we created a code to [describe Aaron’s
-code]</p>
-<p>[add Aaron’s code]</p>
-<p>Our findings demonstrated that the number of shootings on holidays
-was lower than other days. This is expected as the holidays represent
-only XX days, or XX% of the total days in a year.</p>
-<p>We also compared the victims’ and perpetrators’ ages on shootings
-that occurred on holidays vs. other days of the year. These were not
-significantly different by a proportion test.</p>
+<p><strong>Background:</strong> We were interested to see if shooting
+incidents occurred in different frequency on New York City holidays
+compared to other days of the year. We hypothesized that both shooting
+victims and perpetrators would be more likely to be juveniles on
+holidays, as these days would represent periods in which school was not
+in session and therefore potential opportunities for social
+disruption.</p>
+<p><strong>Methods:</strong> We defined holidays as specific calendar
+days designed as state holidays in New York State. On some instances a
+designated holiday was assigned as that which the holiday was
+<em>observed</em> rather than on the typical/historic day of
+observation. For example, New Year’s Day is a state-observed holiday in
+New York State. January 1, 2012 occurred on Sunday. However, Monday,
+January 2, 2012 was designed as New Year’s Day in accordance with state
+observation. Additionally, Lincoln’s Birthday and Washington’s Birthday
+are designated as individual holidays in New York State. These typically
+occur on February 12th and 15th, respectively. In other states, these
+days are observed in combination on the third Monday in February. In
+some analyses, we combined Lincon’s and Washington’s Birthdays as one
+holiday, to allow for equitable comparison of shooting incidence and
+demographics to other holidays.</p>
+<p>We included the the following New York State-recognized holidays: New
+Year’s Day, Martin Luther King Jr. Day, Lincoln’s Birthday, Washington’s
+Birthday, Memorial Day, Juneteenth, Independence Day, Labor Day,
+Columbus Day, Veteran’s Day, Thanksgiving, and Christmas.</p>
 
 
 
@@ -428,6 +453,11 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("hide" === "show");
+});
+</script>
 
 <script>
 $(document).ready(function ()  {
