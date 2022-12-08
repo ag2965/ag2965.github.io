@@ -8,31 +8,7 @@ output:
     code_folding: "hide"
 ---
 
-```{r setup, include = FALSE}
-library(tidyverse)
-library(patchwork)
-library(plotly)
-library(leaflet)
-library(lubridate)
-
-knitr::opts_chunk$set(
-echo = TRUE,
-warning = FALSE,
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "90%")
-
-theme_set(theme_minimal() + theme(legend.position = "bottom"))
-
-options(
-  ggplot2.continuous.colour = "viridis",
-  ggplot2.continuous.fill = "viridis")
-
-scale_colour_discrete = scale_colour_viridis_d
-scale_fill_discrete = scale_fill_viridis_d
-```
-
-```{r basic data framing and tidying, include = TRUE, message = FALSE, warning = FALSE, echo = FALSE}
+```{r basic data framing and tidying}
 nypd_shooting_df = 
   read_csv("data/nypd_shooting_data.csv") %>%
   janitor::clean_names() %>%
@@ -67,7 +43,7 @@ We included the the following New York State-recognized holidays: New Year's Day
 Lincoln's Birthday and Washington's Birthday are designated as individual holidays in New York State. These typically occur on February 12th and 15th, respectively. In other states, these days are observed in combination on the third Monday in February. In some analyses, we combined Lincoln's and Washington's Birthdays as one holiday to allow for equitable comparison of shooting incidence and demographics to other holidays.
 
 We wrote a function to identify these dates individually within the publicly-available dataset:
-```{r function for holidays 2010 - 2021, include = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+```{r function for holidays 2010 - 2021}
 holidays = function(x) {
   if (x == "2010-01-01" | x == "2012-01-02" | x == "2013-01-01" | x ==	"2014-01-01" | x ==	"2015-01-01"| x == "2016-01-01" | x == "2017-01-02" | x ==	"2018-01-01" | x == "2019-01-01" | x ==	"2020-01-01" | x ==	"2021-01-01") {"new year's day observed"}
   else if (x == "2010-01-18"| x == "2011-01-17"| x ==	"2012-01-16"| x ==	"2013-01-21"| x ==	"2014-01-20"| x ==	"2015-01-19"| x ==	"2016-01-18"| x ==	"2017-01-16"| x ==	"2018-01-15"| x ==	"2019-01-21"| x ==	"2020-01-20"| x ==	"2021-01-18") {"mlk day"}
@@ -86,7 +62,7 @@ holidays = function(x) {
 ```
 
 We chose to limit our analyses to years **2010 - 2021**, as this would represent a full decade of data, and applied our holiday function to the data.
-```{r nypd shootings on holidays dataframe, include = FALSE, echo = FALSE, message = FALSE}
+```{r nypd shootings on holidays dataframe}
 # Limiting data to years 2010 - 2021
 # This takes several minutes to run due to mapping many criteria to a large dataset
 nypd_shooting_holidays = 
@@ -106,7 +82,7 @@ nypd_shooting_holidays =
 
 We explored year-to-year variation in shootings in NYC, by holiday.
 
-```{r bar plot count per year in each boro by holiday, include = TRUE, echo = FALSE, warning = FALSE, message = FALSE}
+```{r bar plot count per year in each boro by holiday}
 nypd_shooting_holidays %>% 
   filter(
     holiday_summary != "non-holiday")%>% 
@@ -125,7 +101,7 @@ nypd_shooting_holidays %>%
 
 We were interested to see if some holidays are safer than other holidays. (We combined Lincoln's and Washington's birthdays into one "President's Day" holiday for this analysis.)
 
-```{r total shootings 2010 - 2021 per holiday, include = TRUE, message = FALSE, warning = FALSE, echo = FALSE}
+```{r total shootings 2010 - 2021 per holiday}
 nypd_shooting_holidays %>% 
   filter(
     holiday_summary != "non-holiday") %>% 
@@ -148,7 +124,7 @@ nypd_shooting_holidays %>%
 
 We explored whether the range of shooters' ages appeared subjectively different on non-holidays compared to holidays.
 
-```{r perp ages histograms, include = TRUE, echo = FALSE, message = FALSE, warning= FALSE}
+```{r perp ages histograms}
 perp_ages_non_holidays_histogram = 
 nypd_shooting_holidays %>% 
   filter(
@@ -183,7 +159,7 @@ In this plot, `trace 0` represents non-holidays and `trace 1` represents holiday
 
 Similarly, we explored whether the range of victims' ages appeared subjectively different on non-holidays compared to holidays.
 
-```{r victim ages histograms, include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r victim ages histograms}
 vic_ages_non_holidays_histogram = 
 nypd_shooting_holidays %>% 
   filter(
@@ -212,7 +188,7 @@ In this plot, `trace 0` represents non-holidays and `trace 1` represents holiday
 
 As above, we hypothesized that the proportion of juvenile _perpetrators_ (< 18 years old) compared to adult perpetrators (> 18 years old) would be different on holidays compared to non-holidays. We performed a two-sample test of proportions to test this theory (versus the null hypothesis that juveniles would perform equivalent proportion of shootings on holidays compared to non-holidays). Statistical significance was defined as p < 0.05
 
-```{r prop test perp age <18 vs adult on holiday vs non-holiday, include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r prop test perp age <18 vs adult on holiday vs non-holiday}
 holiday_binary_perp_age_df = 
 nypd_shooting_holidays %>% 
     # omitting age ranges of 1020, 224, and 940 which have 1 incident each and may be typos
@@ -254,7 +230,7 @@ prop.test(holiday_binary_perp_age_df$juvenile,holiday_binary_perp_age_df$total) 
 
 Finally, we hypothesized that the proportion of juvenile _victims_ (< 18 years old) compared to adult victims (> 18 years old) would be significantly different on holidays compared to non-holidays. We performed a two-sample test of proportions to test this theory (versus the null hypothesis that proportion of juvenile shooting victims would be equivalent on holidays compared to non-holidays). Statistical significance was defined as p < 0.05
 
-```{r prop test victim age <18 vs adult on holiday vs non-holiday, include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+```{r prop test victim age <18 vs adult on holiday vs non-holiday}
 holiday_binary_vic_age_df = 
 nypd_shooting_holidays %>% 
   drop_na(vic_age_group) %>% 
