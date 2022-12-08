@@ -1,6 +1,5 @@
 ---
 title: "NYC Shooting Data"
-author: "Elise, Jennifer, Aaron, Aaki, Margaret"
 output: 
   html_document:
     toc: true
@@ -8,15 +7,22 @@ output:
     theme: cosmo
 ---
  
-```{r setup, include=FALSE}
+```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Welcome to our final project website for p8105! </center>
+### Introduction
+Welcome to our final project website for p8105! 
 <br>
+
 The tabs above describe our project’s dataset, present our analyses, a project report, and a screencast. Please enjoy!
  
 <img src="nycshootings.jpg">
+<br>
+<br>
 
- 
- 
-
+### Collaborators
+Elise Kang (ek2794) <br>
+Aaron Mittel (am4656) <br>
+Aakriti Shukla (ag2965) <br>
+Jennifer Lee (jl2361) <br>
+Margaret Ding (md4036) <br>
