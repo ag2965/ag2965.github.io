@@ -88,6 +88,7 @@ ggplotly(shooting_line)
 
 ### Which year was most deadly?
 Similarly, 2006 then more recently 2020 and 2021 were most deadly.
+
 ```{r}
 murder_year = 
   nypd_shooting_df %>%

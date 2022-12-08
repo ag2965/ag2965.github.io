@@ -6,3 +6,27 @@ output:
     toc_float: true
     theme: cosmo
 ---
+
+Here are some resources we found helpful over the course of our project. 
+<br>
+<br>
+
+### Dataset 
+
+[NYPD Shooting Incident Data](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8): publicly available dataset from the NYC Open Data website, which lists every shooting incident that occurred in NYC from 2006 to 2021
+<br>
+<br>
+
+### Motivating Articles 
+[A Violent August in NYC](https://www.nytimes.com/2020/09/02/nyregion/nyc-shootings-murders.html): describes the eruption of gun violence in NYC during the summer of 2020 (NYT, August 2020) 
+
+["Raise the Age" law](https://ww2.nycourts.gov/ip/oji/raisetheage.shtml#:~:text=On%20April%2010%2C%202017%2C%20New,evidence%2Dbased%20treatment%20they%20need.): describes the legislation that raised the age of criminal responsibility to 18 years of age in NY state beginning April 2017
+
+[Soaring NYC teen shootings](https://nypost.com/2022/09/25/raise-the-age-law-is-clearly-behind-soaring-nyc-teen-shootings/): reports the rising number of teen shooters and victims in NYC since "Raise the Age"... an unintended, unfortunate consequence (NY Post, September 2022)
+
+[Violence in the Big Apple throughout the COVID-19 pandemic](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9095435/): reports the effects of the COVID-19 pandemic and period of social unrest following the murder of George Floyd on the incidence of shootings in NYC with borough-specific analyses (J Crim Justice, May 2022)
+<br>
+<br>
+
+### Mapping Packages
+[Leaflet for R](https://rstudio.github.io/leaflet/): documentation describing how to integrate interactive Leaflet maps in R

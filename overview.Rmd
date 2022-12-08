@@ -52,9 +52,9 @@ nypd_shooting_df =
   select(incident_key, year, month_name, month, day, hour, minute, second, minute_calc, everything())
 ```
 
-Here is a summary of the overall demographics of the perpetrators and victims involved in NYC shootings, including age, sex, and race/ethnicity. There were a total of `r nrow(nypd_shooting_df)` shootings from 2006 to 2021 reported by the NYPD. Overall, we see that <b> the majority of victims and perpetrators were young (aged 18-44 years), black, and males. </b> <br>
+Here is a summary of the overall demographics of the perpetrators and victims involved in NYC shootings, including age, sex, and race/ethnicity. There were a total of `r nrow(nypd_shooting_df)` shootings from 2006 to 2021 reported by the NYPD. Overall, we see that <b>the majority of victims and perpetrators were young (aged 18-44 years), black, and males.</b><br>
 
-<em> *Of note, these data included many NA entries particularly for perpetrators, so analyses were conducted on available data. For the purposes of simplifying race/ethnicity categorization, we collapsed white Hispanic and black Hispanic individuals into a single category titled “Hispanic”. </em><br><br>
+<em>*Of note, these data included many NA entries particularly for perpetrators, so analyses were conducted on available data. For the purposes of simplifying race/ethnicity categorization, we collapsed white Hispanic and black Hispanic individuals into a single category titled “Hispanic”.</em><br><br>
 
 ### Perpetrator Demographics
 
@@ -168,7 +168,7 @@ nypd_shooting_df %>%
 On April 10, 2017, New York State raised the age of criminal responsibility to 18 years of age, ensuring that young people in New York who commit non-violent crimes receive the intervention and evidence-based treatment they need. As of October 2019, New York no longer automatically prosecutes 16- and 17-year-olds as adults. This is known as the ["Raise the Age" law](https://ww2.nycourts.gov/ip/oji/raisetheage.shtml#:~:text=On%20April%2010%2C%202017%2C%20New,evidence%2Dbased%20treatment%20they%20need.). There has been concern that this new policy has resulted in a backlash of [increasing NYC teen shootings](
 https://nypost.com/2022/09/25/raise-the-age-law-is-clearly-behind-soaring-nyc-teen-shootings/).
 
-We sought to explore this trend and see if it holds true according to this dataset. <b> It is sobering to see that the number and percentage of shooters and victims aged <18 years in NYC has approximately doubled in the five years since "Raise the Age" in our analysis. </b>
+We sought to explore this trend and see if it holds true according to this dataset. <b>It is sobering to see that the number and percentage of shooters and victims aged <18 years in NYC has approximately doubled in the five years since "Raise the Age" in our analysis.</b>
 
 ```{r}
 number_youthperp = 

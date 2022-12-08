@@ -53,7 +53,7 @@ nypd_shooting_df =
 ```
 
 ### Scatterplot
-Here is a scatterplot of all shooting incidents using the latitude and longitude data. We overlaid these data points onto a map of NYC using the leaflet library. Information on the month, year, borough, and the category of location (private house, public housing, restaurant, etc) is shown in the text box that appears when hovering over the plot.
+Here is a scatterplot of all shooting incidents using the latitude and longitude data. We overlaid these data points onto a map of NYC using the [Leaflet library](https://rstudio.github.io/leaflet/). Information on the month, year, borough, and the category of location (private house, public housing, restaurant, etc) is shown in the text box that appears when hovering over the plot.
 
 ```{r}
 pal <- colorFactor("viridis", nypd_shooting_df$year)
@@ -83,7 +83,7 @@ nypd_shooting_df %>%
 ```
 
 ### Shootings by Borough
-Brooklyn had the highest number of shootings across all boroughs, while Staten Island had the lowest number. We see that the number of shootings universally spiked in 2020. This is consistent with [reports](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9095435/) that violence erupted in the midst of the COVID-19 pandemic and social distancing measures, which collided with a period of social unrest following the murder of George Floyd in Minneapolis. 
+Brooklyn had the highest number of shootings across all boroughs, while Staten Island had the lowest number. We see that the number of shootings universally spiked in 2020. This is consistent with [reports](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9095435/) that violence erupted in the midst of the COVID-19 pandemic and social distancing measures, which coincided with a period of social unrest following the murder of George Floyd in Minneapolis. 
 ```{r}
 boro_graph = 
   nypd_shooting_df %>%
