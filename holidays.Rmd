@@ -210,7 +210,7 @@ In this plot, `trace 0` represents non-holidays and `trace 1` represents holiday
 
 ### Is there a significant difference in the proportion of shooting perpetrators that are < 18 years old compared to perpetrators > 18 years old on holidays compared to non-holidays?
 
-As above, we hypothesized that the proportion of juvenile perpetrators (< 18 years old) compared to adult perpetrators (> 18 years old) would be significantly larger on holidays compared to non-holidays. We performed a two-sample test of proportions to test this hypothesis.
+As above, we hypothesized that the proportion of juvenile _perpetrators_ (< 18 years old) compared to adult perpetrators (> 18 years old) would be different on holidays compared to non-holidays. We performed a two-sample test of proportions to test this theory (versus the null hypothesis that juveniles would perform equivalent proportion of shootings on holidays compared to non-holidays). Statistical significance was defined as p < 0.05
 
 ```{r prop test perp age <18 vs adult on holiday vs non-holiday, include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 holiday_binary_perp_age_df = 
@@ -252,7 +252,7 @@ prop.test(holiday_binary_perp_age_df$juvenile,holiday_binary_perp_age_df$total) 
 
 ### Is there a significant difference in the proportion of shooting victims who are < 18 years old compared to victims > 18 years old on holidays compared to non-holidays?
 
-Finally, we hypothesized that the proportion of juvenile victims (< 18 years old) compared to adult victims (> 18 years old) would be significantly larger on holidays compared to non-holidays. We performed a two-sample test of proportions to test this hypothesis.
+Finally, we hypothesized that the proportion of juvenile _victims_ (< 18 years old) compared to adult victims (> 18 years old) would be significantly different on holidays compared to non-holidays. We performed a two-sample test of proportions to test this theory (versus the null hypothesis that proportion of juvenile shooting victims would be equivalent on holidays compared to non-holidays). Statistical significance was defined as p < 0.05
 
 ```{r prop test victim age <18 vs adult on holiday vs non-holiday, include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
 holiday_binary_vic_age_df = 
