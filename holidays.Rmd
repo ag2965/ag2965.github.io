@@ -57,6 +57,7 @@ nypd_shooting_df =
 We were interested to see if shooting incidents occurred in different frequency on New York City holidays compared to other days of the year. We hypothesized that both shooting victims and perpetrators would be more likely to be juveniles on holidays, as these days would represent periods in which school was not in session and therefore potential opportunities for social disruption.
 
 **Methods:**
+<<<<<<< HEAD
 We defined NYC holidays as specific calendar days designed as state holidays in New York State. On some instances a designated holiday was assigned as the day upon which the holiday was _observed_ rather than on the typical/historic day of observation. For example, New Year's Day is a state-observed holiday in New York State. January 1, 2012 occurred on Sunday (a typical weekend/non-working day). Thus, Monday, January 2, 2012 was designed as New Year's Day in accordance with state observation and was labeled in our analysis as a holiday.
 
 We included the the following New York State-recognized holidays: New Year's Day, Martin Luther King Jr. Day, Lincoln's Birthday, Washington's Birthday, Memorial Day, Juneteenth, Independence Day, Labor Day, Columbus Day, Veteran's Day, Thanksgiving, and Christmas.
@@ -275,3 +276,8 @@ prop.test(holiday_binary_vic_age_df$juvenile,holiday_binary_vic_age_df$total) %>
 ```
 
 **We did not identify a significant difference in the proportion of juvenile compared to non-juvenile victims of shootings on holidays versus non-holidays.**
+=======
+We defined holidays as specific calendar days designed as state holidays in New York State. On some instances a designated holiday was assigned as that which the holiday was _observed_ rather than on the typical/historic day of observation. For example, New Year's Day is a state-observed holiday in New York State. January 1, 2012 occurred on Sunday. However, Monday, January 2, 2012 was designed as New Year's Day in accordance with state observation. Additionally, Lincoln's Birthday and Washington's Birthday are designated as individual holidays in New York State. These typically occur on February 12th and 15th, respectively. In other states, these days are observed in combination on the third Monday in February. In some analyses, we combined Lincon's and Washington's Birthdays as one holiday, to allow for equitable comparison of shooting incidence and demographics to other holidays.
+
+We included the the following New York State-recognized holidays: New Year's Day, Martin Luther King Jr. Day, Lincoln's Birthday, Washington's Birthday, Memorial Day, Juneteenth, Independence Day, Labor Day, Columbus Day, Veteran's Day, Thanksgiving, and Christmas.
+>>>>>>> e080d552d39012d9ae813866713ec998f13edd42

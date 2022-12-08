@@ -16,7 +16,7 @@
 <script src="site_libs/header-attrs-2.16/header-attrs.js"></script>
 <script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -334,13 +334,13 @@ div.tocify {
   <a href="about.html">About the Data</a>
 </li>
 <li>
-  <a href="overview.html">Overview/Demographics</a>
+  <a href="overview.html">Overview</a>
 </li>
 <li>
   <a href="mapping.html">Mapping</a>
 </li>
 <li>
-  <a href="timeanalyses.html">“Time analyses"</a>
+  <a href="timeanalyses.html">Time Analyses</a>
 </li>
 <li>
   <a href="holidays.html">Holidays</a>
@@ -380,47 +380,54 @@ div.tocify {
 </div>
 
 
-<p>NYC Shootings Dataset</p>
-<p>This dataset, which is publicly available on the NYC Open Data
-website (<a
-href="https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8"
-class="uri">https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8</a>),
-includes every shooting incident that took place in New York City from
-2006 to 2021. The Office of Management Analysis and Planning manually
-extracts and reviews the data on a quarterly basis before posting it on
-the NYPD website. Each record describes a shooting incident in one of
-the five NYC boroughs and offers demographic details about the victim
-and perpetrator, the time and location (latitude and longitude, type of
-property, etc) of the incident, whether the shooting resulted in death,
-etc. The NYC Open Data website offers the data so that the public can
+<div id="nyc-shootings-dataset" class="section level3">
+<h3>NYC Shootings Dataset</h3>
+<p>This dataset, which is publicly available on the <a
+href="https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8">NYC
+Open Data website</a>, includes every shooting incident that took place
+in New York City from 2006 to 2021. The Office of Management Analysis
+and Planning manually extracts and reviews the data on a quarterly basis
+before posting it on the NYPD website.</p>
+<p>Each record describes a shooting incident in one of the five NYC
+boroughs and offers demographic details about the victim and
+perpetrator, the time and location (latitude and longitude, type of
+property, etc) of the incident, and whether the shooting resulted in
+death. The NYC Open Data website offers the data so that the public can
 “explore the nature of shooting/criminal activity.” Our team of P8105
 students was up to this challenge and performed a variety of exploratory
-analyses, which are described above.</p>
+analyses.</p>
+<p><br></p>
+</div>
+<div id="codebook" class="section level3">
+<h3>Codebook</h3>
 <p>Below, we have described the variables included in this dataset, and
 have included comments about each:</p>
-<p>Incident_key: randomly generated persistent ID for each arrest</p>
-<p>Occur_date: exact date of the shooting incident</p>
-<p>Occur_time: exact time of shooting incident</p>
-<p>Boro: borough where the shooting incident occurred</p>
-<p>Precinct: precinct where the shooting incident occurred</p>
-<p>Jurisdiction_code: jurisdiction where the shooting incident
+<p><b>Incident_key:</b> randomly generated persistent ID for each
+arrest</p>
+<p><b>Occur_date:</b> exact date of the shooting incident</p>
+<p><b>Occur_time:</b> exact time of shooting incident</p>
+<p><b>Boro:</b> borough where the shooting incident occurred</p>
+<p><b>Precinct:</b> precinct where the shooting incident occurred</p>
+<p><b>Jurisdiction_code:</b> jurisdiction where the shooting incident
 occurred</p>
-<p>Location_desc: location of the shooting incident</p>
-<p>Statistical_murder_flat: shooting results in the victim’s death,
-would be counted as a murder</p>
-<p>perp _age_group: perpetrator’s age within a category</p>
-<p>Perp_sex: perpetrator’s sex description</p>
-<p>Perp_race: perpetrator’s race description</p>
-<p>Vic_age_group: victim’s age within a category</p>
-<p>Vic_sex: Victim’s sex description</p>
-<p>Vic_race: victim’s race description</p>
-<p>X_coord_cd: midblock X-coordinate for New York State Plane Coordinate
+<p><b>Location_desc:</b> location of the shooting incident</p>
+<p><b>Statistical_murder_flag:</b> shooting results in the victim’s
+death, would be counted as a murder</p>
+<p><b>Perp_age_group:</b> perpetrator’s age within a category</p>
+<p><b>Perp_sex:</b> perpetrator’s sex description</p>
+<p><b>Perp_race:</b> perpetrator’s race description</p>
+<p><b>Vic_age_group:</b> victim’s age within a category</p>
+<p><b>Vic_sex:</b> victim’s sex description</p>
+<p><b>Vic_race:</b> victim’s race description</p>
+<p><b>X_coord_cd:</b> midblock X-coordinate for New York State Plane
+Coordinate System</p>
+<p><b>Y_coord_cd:</b> midblock Y-coordinate for New York State Plane
+Coordinate System</p>
+<p><b>Latitude:</b> latitude coordinate for Global Coordinate System</p>
+<p><b>Longitude:</b> longitude coordinate for Global Coordinate
 System</p>
-<p>Y_coord_cd: midblock Y-coordinate for New York State Plane Coordinate
-System</p>
-<p>Latitude: latitude coordinate for Global Coordinate System</p>
-<p>Longitude: longitude coordinate for Global Coordinate System</p>
-<p>Lon_Lat: longitude and latitude coordinates for mapping</p>
+<p><b>Lon_lat:</b> longitude and latitude coordinates for mapping</p>
+</div>
 
 
 
