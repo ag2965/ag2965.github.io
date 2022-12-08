@@ -53,11 +53,13 @@ nypd_shooting_df =
   relocate(incident_key, date)
 ```
 
-**Background:**
+# Background
+
 We were interested to see if shooting incidents occurred in different frequency on New York City holidays compared to other days of the year. We hypothesized that both shooting victims and perpetrators would be more likely to be juveniles on holidays, as these days would represent periods in which school was not in session and therefore potential opportunities for social disruption.
 
-**Methods:**
-<<<<<<< HEAD
+
+# Methods
+
 We defined NYC holidays as specific calendar days designed as state holidays in New York State. On some instances a designated holiday was assigned as the day upon which the holiday was _observed_ rather than on the typical/historic day of observation. For example, New Year's Day is a state-observed holiday in New York State. January 1, 2012 occurred on Sunday (a typical weekend/non-working day). Thus, Monday, January 2, 2012 was designed as New Year's Day in accordance with state observation and was labeled in our analysis as a holiday.
 
 We included the the following New York State-recognized holidays: New Year's Day, Martin Luther King Jr. Day, Lincoln's Birthday, Washington's Birthday, Memorial Day, Juneteenth, Independence Day, Labor Day, Columbus Day, Veteran's Day, Thanksgiving, and Christmas.
@@ -97,9 +99,10 @@ nypd_shooting_holidays =
   unnest(holiday_summary) 
 ```
 
-**Results**
+# Results
 
-# Yearly Variation in Holiday Shootings
+
+### Yearly Variation in Holiday Shootings
 
 We explored year-to-year variation in shootings in NYC, by holiday.
 
@@ -117,7 +120,8 @@ nypd_shooting_holidays %>%
 
 2021 has a greater number of shootings on holidays than prior years, though 2010 and 2011 also had a large number of holiday shootouts.
 
-## Safe vs Lethal Holidays
+
+### Safe vs Lethal Holidays
 
 We were interested to see if some holidays are safer than other holidays. (We combined Lincoln's and Washington's birthdays into one "President's Day" holiday for this analysis.)
 
@@ -139,7 +143,8 @@ nypd_shooting_holidays %>%
 
 **In general, holidays that occur in summer months have a larger number of shootings than those in the fall or winter.**
 
-## Perpetrator Age Distribution on Non-holidays compared to Holidays
+
+### Perpetrator Age Distribution on Non-holidays compared to Holidays
 
 We explored whether the range of shooters' ages appeared subjectively different on non-holidays compared to holidays.
 
@@ -173,7 +178,8 @@ subplot(perp_ages_non_holidays_histogram, perp_age_holidays_histogram, shareX = 
 
 In this plot, `trace 0` represents non-holidays and `trace 1` represents holidays. Clearly, shootings on non-holidays are more common than on holidays. However, it is unclear in this histogram if the proportion of juvenile perpetrators is different on holidays than on non-holidays.
 
-## Victim  Age Distribution on Non--holidays compared to Holidays
+
+### Victim  Age Distribution on Non--holidays compared to Holidays
 
 Similarly, we explored whether the range of victims' ages appeared subjectively different on non-holidays compared to holidays.
 
@@ -202,7 +208,7 @@ subplot(vic_ages_non_holidays_histogram, vic_ages_holidays_histogram, shareX = T
 
 In this plot, `trace 0` represents non-holidays and `trace 1` represents holidays. Clearly, shootings on non-holidays are more common than on holidays. However, it is unclear in this histogram if the proportion of juvenile victims is different on holidays than on non-holidays.
 
-## Is there a significant difference in the proportion of shooting perpetrators that are < 18 years old compared to perpetrators > 18 years old on holidays compared to non-holidays?
+### Is there a significant difference in the proportion of shooting perpetrators that are < 18 years old compared to perpetrators > 18 years old on holidays compared to non-holidays?
 
 As above, we hypothesized that the proportion of juvenile perpetrators (< 18 years old) compared to adult perpetrators (> 18 years old) would be significantly larger on holidays compared to non-holidays. We performed a two-sample test of proportions to test this hypothesis.
 
@@ -243,7 +249,8 @@ prop.test(holiday_binary_perp_age_df$juvenile,holiday_binary_perp_age_df$total) 
 
 **We did not identify a significant difference in the proportion of shootings perpetrated by juveniles compared to non-juveniles on holidays versus non-holidays.**
 
-## Is there a significant difference in the proportion of shooting victims who are < 18 years old compared to victims > 18 years old on holidays compared to non-holidays?
+
+### Is there a significant difference in the proportion of shooting victims who are < 18 years old compared to victims > 18 years old on holidays compared to non-holidays?
 
 Finally, we hypothesized that the proportion of juvenile victims (< 18 years old) compared to adult victims (> 18 years old) would be significantly larger on holidays compared to non-holidays. We performed a two-sample test of proportions to test this hypothesis.
 
@@ -276,3 +283,7 @@ prop.test(holiday_binary_vic_age_df$juvenile,holiday_binary_vic_age_df$total) %>
 ```
 
 **We did not identify a significant difference in the proportion of juvenile compared to non-juvenile victims of shootings on holidays versus non-holidays.**
+
+# Conclusion
+
+Holidays have fewer shooting incidents than non-holidays. Some holidays are "safer" than others, though this may represent seasonal variation rather than a distinct effect of the celebratory cause itself. Juveniles commit (and suffer) a comparable proportion of shootings to adults on holidays as they do on non-holidays.
