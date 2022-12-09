@@ -13,6 +13,9 @@ library(tidyverse)
 library(patchwork)
 library(plotly)
 library(leaflet)
+library(gganimate)
+library(gifski)
+
 
 knitr::opts_chunk$set(
 echo = TRUE,
@@ -162,6 +165,69 @@ nypd_shooting_df %>%
     percentage = count / sum(count) * 100,
     percentage = round(percentage, digits = 1)) %>%
   knitr::kable()
+```
+
+### Murders by Race/Ethnicity
+We were also curious to see which race/ethnicity group suffered the highest mortality from shooting incidents from 2006 to 2021. The animation below shows that black individuals had the highest percentage of murders from shooting incidents overall, and by year, then Hispanics.
+
+```{r}
+scatter_df = 
+  nypd_shooting_df%>%
+  mutate(
+    vic_race = recode(vic_race, "black hispanic" = "hispanic", "white hispanic" = "hispanic", "asian / pacific islander" = "asian_pacific"), 
+  vic_race = na_if(vic_race, "unknown")) %>%
+  filter (statistical_murder_flag == "TRUE", 
+          vic_race != "NA") %>%
+  relocate(vic_race, year) %>%
+  group_by(year, vic_race) %>%
+  count() %>%
+  ungroup(year, vic_race)
+  
+relocate_race =
+  nypd_shooting_df %>%
+   relocate(vic_race, year) %>%
+  mutate(
+    vic_race = recode(vic_race, "black hispanic" = "hispanic", "white hispanic" = "hispanic", "asian / pacific islander" = "asian_pacific"), 
+  vic_race = na_if(vic_race, "unknown")) %>%
+  filter (statistical_murder_flag == "TRUE", 
+          vic_race != "NA") 
+
+anim_scatter =
+  left_join(relocate_race, scatter_df, by = c("vic_race" = "vic_race", "year" = "year"))
+ 
+by_year = 
+  scatter_df %>%
+  ungroup() %>%
+  group_by(year) %>%
+  pivot_wider(
+    names_from = vic_race,
+    values_from = n) %>%
+  mutate(
+    totalsbyyear = 
+       as.numeric(asian_pacific) + as.numeric(black) +as.numeric(hispanic) + as.numeric(white)) %>%
+pivot_longer(
+  asian_pacific:white, 
+  names_to = "vic_race",
+  values_to = "n") %>%
+  select (vic_race,year, n, totalsbyyear)
+  
+anim_scatter2 = 
+  left_join(anim_scatter, by_year, by =c("year" = "year", "vic_race" = "vic_race","n" = "n")) 
+  
+anim_scatter_plot = 
+  anim_scatter2 %>% 
+  group_by(vic_race, year) %>% 
+  mutate(
+    percentage= (n/totalsbyyear * 100)) %>% 
+  ggplot(aes(x = year, y = percentage, color = vic_race)) +
+  geom_line() +
+  geom_point() +
+  labs(title = "Percentages of Shootings Resulting in Murders by Race/Ethnicity",
+       x = "Year",
+       y = "Percentage") +
+  transition_reveal(year)
+ 
+animate(anim_scatter_plot, renderer = gifski_renderer())
 ```
 
 ### "Raise the Age" Analysis

@@ -715,6 +715,72 @@ titled “Hispanic”.</em><br><br></p>
 </table>
 </div>
 </div>
+<div id="murders-by-raceethnicity" class="section level3">
+<h3>Murders by Race/Ethnicity</h3>
+<p>We were also curious to see which race/ethnicity group suffered the
+highest mortality from shooting incidents from 2006 to 2021. The
+animation below shows that black individuals had the highest percentage
+of murders from shooting incidents overall, and by year, then
+Hispanics.</p>
+<pre class="r"><code>scatter_df = 
+  nypd_shooting_df%&gt;%
+  mutate(
+    vic_race = recode(vic_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;, &quot;asian / pacific islander&quot; = &quot;asian_pacific&quot;), 
+  vic_race = na_if(vic_race, &quot;unknown&quot;)) %&gt;%
+  filter (statistical_murder_flag == &quot;TRUE&quot;, 
+          vic_race != &quot;NA&quot;) %&gt;%
+  relocate(vic_race, year) %&gt;%
+  group_by(year, vic_race) %&gt;%
+  count() %&gt;%
+  ungroup(year, vic_race)
+  
+relocate_race =
+  nypd_shooting_df %&gt;%
+   relocate(vic_race, year) %&gt;%
+  mutate(
+    vic_race = recode(vic_race, &quot;black hispanic&quot; = &quot;hispanic&quot;, &quot;white hispanic&quot; = &quot;hispanic&quot;, &quot;asian / pacific islander&quot; = &quot;asian_pacific&quot;), 
+  vic_race = na_if(vic_race, &quot;unknown&quot;)) %&gt;%
+  filter (statistical_murder_flag == &quot;TRUE&quot;, 
+          vic_race != &quot;NA&quot;) 
+
+anim_scatter =
+  left_join(relocate_race, scatter_df, by = c(&quot;vic_race&quot; = &quot;vic_race&quot;, &quot;year&quot; = &quot;year&quot;))
+ 
+by_year = 
+  scatter_df %&gt;%
+  ungroup() %&gt;%
+  group_by(year) %&gt;%
+  pivot_wider(
+    names_from = vic_race,
+    values_from = n) %&gt;%
+  mutate(
+    totalsbyyear = 
+       as.numeric(asian_pacific) + as.numeric(black) +as.numeric(hispanic) + as.numeric(white)) %&gt;%
+pivot_longer(
+  asian_pacific:white, 
+  names_to = &quot;vic_race&quot;,
+  values_to = &quot;n&quot;) %&gt;%
+  select (vic_race,year, n, totalsbyyear)
+  
+anim_scatter2 = 
+  left_join(anim_scatter, by_year, by =c(&quot;year&quot; = &quot;year&quot;, &quot;vic_race&quot; = &quot;vic_race&quot;,&quot;n&quot; = &quot;n&quot;)) 
+  
+anim_scatter_plot = 
+  anim_scatter2 %&gt;% 
+  group_by(vic_race, year) %&gt;% 
+  mutate(
+    percentage= (n/totalsbyyear * 100)) %&gt;% 
+  ggplot(aes(x = year, y = percentage, color = vic_race)) +
+  geom_line() +
+  geom_point() +
+  labs(title = &quot;Percentages of Shootings Resulting in Murders by Race/Ethnicity&quot;,
+       x = &quot;Year&quot;,
+       y = &quot;Percentage&quot;) +
+  transition_reveal(year)
+ 
+animate(anim_scatter_plot, renderer = gifski_renderer())</code></pre>
+<p><img src="overview_files/figure-html/unnamed-chunk-8-1.gif" width="90%" /></p>
+</div>
 <div id="raise-the-age-analysis" class="section level3">
 <h3>“Raise the Age” Analysis</h3>
 <p>On April 10, 2017, New York State raised the age of criminal
@@ -773,7 +839,7 @@ nypd_shooting_df %&gt;%
   labs(title = &quot;% Shootings by &lt;18 Year Olds&quot;) 
 
 number_youthperp + percent_youthperp</code></pre>
-<p><img src="overview_files/figure-html/unnamed-chunk-8-1.png" width="90%" /></p>
+<p><img src="overview_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
 <pre class="r"><code>number_youthvic = 
   nypd_shooting_df %&gt;%
   group_by(vic_age_group) %&gt;%
@@ -811,7 +877,7 @@ percent_vicyouth =
   labs(title = &quot;% Shooting Victims &lt;18 Years&quot;) 
 
 number_youthvic + percent_vicyouth</code></pre>
-<p><img src="overview_files/figure-html/unnamed-chunk-9-1.png" width="90%" /></p>
+<p><img src="overview_files/figure-html/unnamed-chunk-10-1.png" width="90%" /></p>
 </div>
 
 
