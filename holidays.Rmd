@@ -28,7 +28,7 @@ scale_colour_discrete = scale_colour_viridis_d
 scale_fill_discrete = scale_fill_viridis_d
 ```
 
-```{r}
+```{r message=FALSE, warning=FALSE, include=FALSE}
 nypd_shooting_df = 
   read_csv("data/nypd_shooting_data.csv") %>%
   janitor::clean_names() %>%
@@ -102,7 +102,7 @@ nypd_shooting_holidays =
 
 We explored year-to-year variation in shootings in NYC, by holiday.
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 nypd_shooting_holidays %>% 
   filter(
     holiday_summary != "non-holiday")%>% 
@@ -208,7 +208,7 @@ In this plot, `trace 0` represents non-holidays and `trace 1` represents holiday
 
 As above, we hypothesized that the proportion of juvenile _perpetrators_ (< 18 years old) compared to adult perpetrators (> 18 years old) would be different on holidays compared to non-holidays. We performed a two-sample test of proportions to test this theory (versus the null hypothesis that juveniles would perform equivalent proportion of shootings on holidays compared to non-holidays). Statistical significance was defined as p < 0.05
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 holiday_binary_perp_age_df = 
 nypd_shooting_holidays %>% 
     # omitting age ranges of 1020, 224, and 940 which have 1 incident each and may be typos
@@ -250,7 +250,7 @@ prop.test(holiday_binary_perp_age_df$juvenile,holiday_binary_perp_age_df$total) 
 
 Finally, we hypothesized that the proportion of juvenile _victims_ (< 18 years old) compared to adult victims (> 18 years old) would be significantly different on holidays compared to non-holidays. We performed a two-sample test of proportions to test this theory (versus the null hypothesis that proportion of juvenile shooting victims would be equivalent on holidays compared to non-holidays). Statistical significance was defined as p < 0.05
 
-```{r}
+```{r message=FALSE, warning=FALSE}
 holiday_binary_vic_age_df = 
 nypd_shooting_holidays %>% 
   drop_na(vic_age_group) %>% 
