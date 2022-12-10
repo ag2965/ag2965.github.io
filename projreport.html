@@ -380,7 +380,149 @@ div.tocify {
 </div>
 
 
-
+<p><strong>Team Members:</strong> Elise Kang, Jennifer Lee, Aaron
+Mittel, Aakriti Shukla, Margaret Ding <br><br></p>
+<div id="motivation" class="section level3">
+<h3>Motivation</h3>
+<p>As residents of New York City in the summer of 2020, we all
+experienced the <a
+href="https://www.nytimes.com/2020/09/02/nyregion/nyc-shootings-murders.html">sudden
+spike in crime and shootings</a> perpetuating throughout the city,
+filling our city with much unease and fear. While it is easy to
+generalize about trends in perpetrators, victims, and locations of
+crime, we aimed to delve into NYC’s crime data from a data science
+perspective. As we learned from working with the homicide data from the
+Washington Post article, data science is an incredibly powerful tool to
+comprehend such types of large datasets. We sought to understand crime
+data in a similar fashion, applying the tools we have learned this
+semester, to our own city that we live in. <br><br></p>
+</div>
+<div id="dataset-and-processing" class="section level3">
+<h3>Dataset and Processing</h3>
+<p>We selected data from the NYC Open Data source and used the <a
+href="https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8">NYPD
+Shooting Incident Data</a> that listed every shooting incident that
+occurred in NYC from 2006 to 2021. This data is manually extracted and
+reviewed by the Office of Management Analysis and Planning before being
+posted on the NYPD website. As we aimed to explore analyses with time
+and location, we cleaned and recoded the data, breaking down the date
+and time variables into a format that was easier to wrangle such that we
+would be able to perform desired analyses. <br><br></p>
+</div>
+<div id="questions-and-planned-analyses" class="section level3">
+<h3>Questions and Planned Analyses</h3>
+<p>Our initial questions we aimed to answer pertained to demographic
+information regarding the victims and perpetrators as well as the
+circumstances of the crime itself.</p>
+<p><strong>Were there any trends with age groups, sex, or race/ethnicity
+of the victims and perpetrators?</strong></p>
+<p>Variables of interest that pertained to these questions are:
+Perpetrator age group, perpetrator sex, perpetrator race/ethnicity,
+victim age group, victim sex, and victim race/ethnicity.</p>
+<p><strong>Which boroughs or type of locations were the shootings most
+likely to occur?</strong></p>
+<p>Variables of interest that pertained to these questions are: Borough,
+year of shooting, # of shootings in a year, and location type where
+shooting occurred.</p>
+<p><strong>Were there any temporal trends (year, season, time of day) in
+regard to incidence of shootings?</strong></p>
+<p>Variables of interest that pertained to these questions are: Year, #
+of shootings in year, borough, month, and time of shooting.</p>
+<p><strong>Did these trends differ for the number of shootings versus
+actual number of murders?</strong></p>
+<p>In addition to the variables above, the variable
+<code>statistical_murder_flag</code> was used to determine if the
+shooting resulted in a victim’s death, which would be counted as a
+murder, or if the shooting did not result in death.</p>
+<p><strong>The 2017 “Raise the Age” Law</strong></p>
+<p>Did the <a
+href="https://ww2.nycourts.gov/ip/oji/raisetheage.shtml#:~:text=On%20April%2010%2C%202017%2C%20New,evidence%2Dbased%20treatment%20they%20need.">2017
+New York State law</a> that raised the age of criminal responsibility
+(when an individual can be tried as an adult) from 16 years to 18 years
+in 2017 change the trends of shootings?</p>
+<p><strong>Holidays</strong></p>
+<p>Did shooting incidents occur more commonly on holidays compared to
+other days of the year? Are certain holidays “safer” than others? Do the
+ages of shooters and victims differ on holidays vs. non-holidays?
+<br><br></p>
+</div>
+<div id="exploratory-analyses" class="section level3">
+<h3>Exploratory Analyses</h3>
+<p>We developed a strong understanding of this data through our various
+analyses presented in the tabs above. Depending on the specific
+variables that were examined through demographic data, we sought to
+present the data in the most visually friendly manner possible,
+including charts, bar graphs, scatterplots, and geomapping.</p>
+<p><strong>Holidays</strong></p>
+<p>As our main exploratory analysis, we delved into the subject of
+holidays and shootings. More specificaly, we hypothesized that both
+shooting victims and perpetrators would be more likely to be juveniles
+on holidays, as these days would represent periods in which school was
+not in session and therefore potential opportunities for social
+disruption. We performed a <em>two-sample test of proportions</em> to
+test this theory (versus the null hypothesis that proportion of juvenile
+shooting victims would be equivalent on holidays compared to
+non-holidays). Statistical significance was defined as p &lt; 0.05.
+<br><br></p>
+</div>
+<div id="summary-and-discussion" class="section level3">
+<h3>Summary and Discussion</h3>
+<p>Our initial goals included describing demographic (age, sex,
+race/ethnicity) trends of victims and perpetrators, boroughs and
+location types of shootings, and temporal trends (year, seasons, time of
+day) of shootings. We found that both shooting perpetrators and victims
+were mostly <strong>young adult black males</strong>. <strong>Public
+housing and apartment buildings</strong> accounted for &gt;28% of all
+shooting locations. Shootings were most common in
+<strong>Brooklyn</strong> and least common in Staten Island. This trend
+may be related to the population size of these locations.</p>
+<p>Shootings more commonly took place in the <strong>summer</strong>.
+The favorable weather may have led to a greater number of interactions
+among members of different households, potentially leading to
+disagreements and shootings. The uptick of shootings in the summer of
+2020 coincided with the period of social unrest following the murder of
+George Floyd in Minneapolis. While there was no singular reason for the
+crime surge seen during this time, the economic downturn and the months
+of restrictions and hardship due to <a
+href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9095435/">coronavirus</a>
+may have also contributed to these trends.</p>
+<p>Next, we wanted to see if these trends differed for the number of
+shootings vs. the number of shootings that resulted in murder.
+Unsurprisingly, we found that <strong>murders followed the same trends
+as shootings</strong>, with the summer of 2020 being particularly
+deadly.</p>
+<p>We were interested in seeing if shooting incidence varied by holidays
+vs. non-holidays and whether the 2017 “Raise the Age” New York State law
+changed the trends in age demographics of perpetrators and victims. This
+law’s intent was to ensure adolescents who committed non-violent crimes
+could receive early intervention and avoid being tried as an adult,
+which could potentially result in lifelong imprisonment. Our analysis
+found that the <strong>number and percentage of shooters and victims
+aged &lt;18 years in NYC approximately doubled in the five years since
+“Raise the Age”</strong> in our analysis.</p>
+<p>Finally, our holidays analysis showed that <strong>holidays have
+fewer shooting incidents than non-holidays</strong>. Some holidays are
+“safer” than others, though this may represent seasonal variation rather
+than a distinct effect of the celebratory cause itself.
+<strong>Juveniles commit (and suffer) a comparable proportion of
+shootings to adults on holidays as they do on non-holidays.</strong>
+<br><br></p>
+</div>
+<div id="limitations" class="section level3">
+<h3>Limitations</h3>
+<p>Our dataset was limited by the significant number of <strong>unknown
+values</strong> (or NAs) in the various variables, particular for
+perpetrator data. Additionally, while we focused on shootings in NYC,
+there are several <strong>other types of crimes</strong> (robbery,
+assault, rape, etc.) that we did not include in our analyses.
+Nevertheless, we were able to provide a thorough overview of the
+shootings that have occurred in NYC from various perspectives including
+demographic information, setting of shootings, and also performed
+hypothesis testing.</p>
+<p>As residents of NYC, we are all aware of safety and crime issues and
+hope that this website can provide others with useful, interesting
+information as well.</p>
+</div>
 
 
 
